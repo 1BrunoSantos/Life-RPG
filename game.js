@@ -77,7 +77,6 @@ function verificarDiasPerdidos() {
         diaPerdido.setDate(dataHoje.getDate() - i); 
         let dataPerdidaStr = diaPerdido.toLocaleDateString("pt-BR");
         
-        // Verifica se já não existe (para não duplicar)
         if (!progresso.historico.find(d => d.data === dataPerdidaStr)) {
             let xpPerdido = -50; 
             let status = "ESQUECEU 💀";
@@ -104,16 +103,13 @@ function verificarDiasPerdidos() {
         }
     }
     
-    // Reordena
     progresso.historico.sort((a, b) => stringParaData(b.data) - stringParaData(a.data));
-    
     if (diasPenalizados > 0) {
         salvar();
         alert(`⚠️ ATENÇÃO!\n\nVocê esqueceu de preencher o diário por ${diasPenalizados} dia(s).\nForam descontados ${diasPenalizados * 50} XP automaticamente.`);
     }
 }
 
-// Verifica periodicamente (ex: virada de noite com app aberto)
 setInterval(() => {
     verificarDiasPerdidos();
     carregarDadosHoje();
@@ -129,13 +125,11 @@ function carregarDadosHoje() {
     const hoje = new Date().toLocaleDateString("pt-BR");
     const registroHoje = progresso.historico.find(dia => dia.data === hoje);
 
-    // Limpa inputs
     inputIds.forEach(id => {
         const el = document.getElementById(id);
         if(el) el.value = ""; 
     });
 
-    // Se tiver dados, preenche
     if (registroHoje && registroHoje.detalhes) {
         inputIds.forEach(id => {
             const el = document.getElementById(id);
@@ -231,11 +225,34 @@ function renderizarMissoes() {
     container.innerHTML = html;
 }
 
+// === NOVA LÓGICA DE BÔNUS DE MISSÃO ===
 function alterarProgresso(index, valor) {
     let missao = progresso.missoes[index];
+    
+    // Verifica se já estava completa ANTES da alteração
+    const estavaCompleta = missao.atual >= 100;
+
     missao.atual += (valor * 5);
+    
+    // Limites
     if (missao.atual < 0) missao.atual = 0;
     if (missao.atual > 100) missao.atual = 100;
+
+    // LÓGICA DE RECOMPENSA (1000 XP)
+    if (!estavaCompleta && missao.atual === 100) {
+        const bonus = 1000;
+        progresso.xpTotal += bonus;
+        alert(`🎉 PARABÉNS! Missão "${missao.titulo}" Concluída!\n\nVocê ganhou +${bonus} XP e subiu de nível! 🚀`);
+    }
+
+    // LÓGICA ANTI-CHEAT (Se desmarcar, perde o XP)
+    if (estavaCompleta && missao.atual < 100) {
+        const penalty = 1000;
+        progresso.xpTotal -= penalty;
+        // Evita XP negativo total
+        if(progresso.xpTotal < 0) progresso.xpTotal = 0; 
+    }
+
     salvar();
 }
 
@@ -265,7 +282,7 @@ function calcularXP() {
     
     // === CÁLCULO ===
     
-    // Pressão (Sis)
+    // Pressão
     let sistolica = Number(vPressaoSis);
     if (sistolica > 50) sistolica = Math.floor(sistolica / 10);
 
@@ -273,7 +290,7 @@ function calcularXP() {
     else if (vPressaoSis !== "" && sistolica === 12) xp += 3; 
     else if (vPressaoSis !== "" && sistolica === 13) xp += 2; 
     else if (vPressaoSis !== "" && sistolica >= 14) xp -= 5;
-    else xp -= 5; // Vazio ou < 11
+    else xp -= 5; 
 
     // Glicemia
     const glicemia = Number(vGlicemia);
@@ -300,7 +317,7 @@ function calcularXP() {
     else if (vCardio !== "" && cardio >= 30) xp += 3; 
     else xp -= 5;
     
-    // Mente (Com Penalidade)
+    // Mente
     const estudo = Number(vEstudo);
     if (vEstudo !== "" && estudo >= 60) xp += 5; 
     else if (vEstudo !== "" && estudo >= 30) xp += 3; 
