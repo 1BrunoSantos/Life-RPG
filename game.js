@@ -1,23 +1,4 @@
-// ====== IMPORTAR O FIREBASE ======
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-// ====== CONFIGURAÇÃO FIREBASE ======
-const firebaseConfig = {
-  apiKey: "AIzaSyDjO76UYBeyJSTaflS702NOEeAqcwKgNW4",
-  authDomain: "life-rpg-7f7bc.firebaseapp.com",
-  projectId: "life-rpg-7f7bc",
-  storageBucket: "life-rpg-7f7bc.firebasestorage.app",
-  messagingSenderId: "61808715622",
-  appId: "1:61808715622:web:885bc37083f63438550aa7"
-};
-
-// Iniciar Firebase
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const dbRef = ref(db, 'jogador_alex'); 
-
-// ====== DADOS PADRÃO ======
+// ====== LISTA PADRÃO DE MISSÕES ======
 const listaMissoesPadrao = [
   { id: 1, cat: "Carreira & Estudos", titulo: "Pós-Graduação Concluída", atual: 0, meta: 100, unidade: "%" },
   { id: 2, cat: "Carreira & Estudos", titulo: "Nota Alta no Enem", atual: 0, meta: 900, unidade: "pts" },
@@ -44,51 +25,29 @@ const listaMissoesPadrao = [
   { id: 23, cat: "Financeiro & Bens", titulo: "Casar", atual: 0, meta: 1, unidade: "check" },
 ];
 
-// Inicializa variável local com padrão para não quebrar a tela
-let progresso = {
+const inputIds = ["pressao", "glicemia", "sono", "treino", "cardio", "estudo", "exercicios", "leitura", "idioma"];
+
+// ====== INICIALIZAÇÃO (Carregar do LocalStorage) ======
+let progresso = JSON.parse(localStorage.getItem("lifeRPG")) || {
   xpTotal: 0,
   nivel: 1,
   historico: [],
   missoes: JSON.parse(JSON.stringify(listaMissoesPadrao))
 };
 
-const inputIds = ["pressao", "glicemia", "sono", "treino", "cardio", "estudo", "exercicios", "leitura", "idioma"];
-
-// ====== SINCRONIZAÇÃO INTELIGENTE (SEM LOOP) ======
-onValue(dbRef, (snapshot) => {
-  const data = snapshot.val();
-
-  if (data) {
-    // Se tem dados na nuvem, usa eles
-    progresso = data;
-    
-    // Se por algum motivo as missões estiverem vazias na nuvem, usa o padrão LOCALMENTE
-    // (Mas não salva automaticamente para evitar loops de permissão)
-    if (!progresso.missoes || progresso.missoes.length === 0) {
-      console.warn("Missões vazias na nuvem. Usando padrão local.");
-      progresso.missoes = JSON.parse(JSON.stringify(listaMissoesPadrao));
-    }
-  } else {
-    // Se a nuvem estiver vazia (null), mantém o padrão local inicial
-    console.log("Banco de dados vazio ou novo usuário.");
-  }
-
-  // Atualiza a tela
-  atualizarInterface();
-}, (error) => {
-  console.error("Erro de permissão:", error);
-  alert("ERRO DE PERMISSÃO: O jogo não consegue salvar na nuvem.\nVá ao console do Firebase > Realtime Database > Regras e altere para '.read': true, '.write': true");
-});
-
-function salvar() {
-  set(dbRef, progresso).catch((error) => {
-      console.error("Erro ao salvar:", error);
-      alert("Erro ao salvar dados! Verifique sua conexão ou permissões.");
-  });
+// Garantia: Se o usuário tem dados antigos mas sem missões, adiciona as missões agora
+if (!progresso.missoes || progresso.missoes.length === 0) {
+    progresso.missoes = JSON.parse(JSON.stringify(listaMissoesPadrao));
 }
 
-// === SISTEMA DE ABAS ===
-window.abrirTab = function(tabId) {
+// Salva e Atualiza
+function salvar() {
+    localStorage.setItem("lifeRPG", JSON.stringify(progresso));
+    atualizarInterface();
+}
+
+// ====== SISTEMA DE ABAS ======
+function abrirTab(tabId) {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
     document.getElementById(tabId).classList.add('active');
@@ -99,38 +58,43 @@ window.abrirTab = function(tabId) {
     if(tabId === 'tab-diario') botoes[2].classList.add('active');
 }
 
+// ====== INTERFACE ======
 function calcularNivel() {
     progresso.nivel = Math.floor(progresso.xpTotal / 1000) + 1;
 }
 
 function atualizarInterface() {
-  calcularNivel();
-  const bannerXp = document.getElementById("banner-xp");
-  const nivelDisplay = document.getElementById("nivel-display");
-  
-  if (bannerXp) bannerXp.innerText = `XP: ${progresso.xpTotal}`;
-  if (nivelDisplay) nivelDisplay.innerText = `NÍVEL ${progresso.nivel}`;
+    calcularNivel();
+    
+    // Atualiza Topo
+    const xpBanner = document.getElementById("banner-xp");
+    const nivelDisplay = document.getElementById("nivel-display");
+    if(xpBanner) xpBanner.innerText = `XP: ${progresso.xpTotal}`;
+    if(nivelDisplay) nivelDisplay.innerText = `NÍVEL ${progresso.nivel}`;
 
-  const listaHistorico = document.getElementById("lista-historico");
-  if(listaHistorico) {
-      let html = "";
-      if(!progresso.historico) progresso.historico = [];
-      
-      progresso.historico.forEach((dia, index) => {
-        let cor = dia.xp >= 0 ? "#4ade80" : "#f87171";
-        html += `
-          <div class="historico-item">
-            <div class="dados-dia">
-                <span style="color: #94a3b8;">${dia.data}</span>
-                <span style="color: ${cor}; font-weight: bold;">${dia.xp} XP</span>
-                <span style="font-size: 12px; opacity: 0.8; border: 1px solid #334155; padding: 2px 6px; border-radius: 4px;">${dia.status}</span>
-            </div>
-            <button onclick="deletarItem(${index})" class="btn-lixeira">🗑️</button>
-          </div>`;
-      });
-      listaHistorico.innerHTML = html;
-  }
-  renderizarMissoes();
+    // Atualiza Histórico
+    const listaHistorico = document.getElementById("lista-historico");
+    if(listaHistorico) {
+        let html = "";
+        if(!progresso.historico) progresso.historico = [];
+        
+        progresso.historico.forEach((dia, index) => {
+            let cor = dia.xp >= 0 ? "#4ade80" : "#f87171";
+            html += `
+            <div class="historico-item">
+                <div class="dados-dia">
+                    <span style="color: #94a3b8;">${dia.data}</span>
+                    <span style="color: ${cor}; font-weight: bold;">${dia.xp} XP</span>
+                    <span style="font-size: 12px; opacity: 0.8; border: 1px solid #334155; padding: 2px 6px; border-radius: 4px;">${dia.status}</span>
+                </div>
+                <button onclick="deletarItem(${index})" class="btn-lixeira">🗑️</button>
+            </div>`;
+        });
+        listaHistorico.innerHTML = html;
+    }
+
+    // Atualiza Missões
+    renderizarMissoes();
 }
 
 function renderizarMissoes() {
@@ -169,7 +133,9 @@ function renderizarMissoes() {
     container.innerHTML = html;
 }
 
-window.alterarProgresso = function(index, valor) {
+// ====== AÇÕES ======
+
+function alterarProgresso(index, valor) {
     let missao = progresso.missoes[index];
     let incremento = 1;
     if (missao.meta >= 1000) incremento = 100; 
@@ -181,81 +147,118 @@ window.alterarProgresso = function(index, valor) {
     salvar();
 }
 
-window.calcularXP = function() {
-  const msgErro = document.getElementById("msg-erro");
-  msgErro.innerHTML = "";
-  
-  if(!progresso.historico) progresso.historico = [];
-
-  const hoje = new Date().toLocaleDateString("pt-BR");
-  if (progresso.historico.some(dia => dia.data === hoje)) {
-    msgErro.innerHTML = "⚠️ Já calculou hoje!";
-    return;
-  }
-
-  for (let id of inputIds) {
-    const el = document.getElementById(id);
-    if (!el || !el.value) {
-      msgErro.innerHTML = "⚠️ Preencha tudo!";
-      return;
+function calcularXP() {
+    const msgErro = document.getElementById("msg-erro");
+    msgErro.innerHTML = "";
+    
+    const hoje = new Date().toLocaleDateString("pt-BR");
+    
+    // Verifica se já jogou hoje
+    if (progresso.historico.some(dia => dia.data === hoje)) {
+        msgErro.innerHTML = "⚠️ Você já lançou o status de hoje!";
+        return;
     }
-  }
 
-  let xp = 0;
-  // Lógica de cálculo
-  const pressao = Number(document.getElementById("pressao").value);
-  if (pressao === 11) xp += 50; else if (pressao === 12) xp += 30; else if (pressao === 13) xp += 10; else if (pressao >= 14) xp -= 30;
-  
-  const glicemia = Number(document.getElementById("glicemia").value);
-  if (glicemia < 99) xp += 50; else if (glicemia <= 149) xp += 30; else if (glicemia === 150) xp += 10; else if (glicemia > 150) xp -= 30;
-  
-  xp += document.getElementById("treino").value === "sim" ? 50 : -30;
-  
-  const cardio = Number(document.getElementById("cardio").value);
-  if (cardio >= 30 && cardio <= 59) xp += 50; else if (cardio >= 60) xp += 100; else xp -= 30;
-  
-  const sono = Number(document.getElementById("sono").value);
-  if (sono >= 5 && sono <= 7) xp += 50; else if (sono > 7) xp += 100; else xp -= 30;
-  
-  const estudo = Number(document.getElementById("estudo").value);
-  if (estudo >= 30 && estudo <= 60) xp += 50; else if (estudo > 60) xp += 100; else xp -= 30;
-  
-  const exercicios = Number(document.getElementById("exercicios").value);
-  if (exercicios >= 5 && exercicios <= 10) xp += 50; else if (exercicios > 10) xp += 100; else xp -= 30;
-  
-  const leitura = Number(document.getElementById("leitura").value);
-  if (leitura >= 15 && leitura <= 30) xp += 50; else if (leitura > 30) xp += 100; else xp -= 30;
-  
-  const idioma = Number(document.getElementById("idioma").value);
-  if (idioma >= 30 && idioma <= 60) xp += 50; else if (idioma > 60) xp += 100; else xp -= 30;
+    // Verifica campos vazios
+    for (let id of inputIds) {
+        const el = document.getElementById(id);
+        if (!el || !el.value) {
+            msgErro.innerHTML = "⚠️ Preencha todos os campos!";
+            el.focus();
+            return;
+        }
+    }
 
-  let status = "NORMAL";
-  if (xp >= 400) status = "ELITE 🔥";
-  else if (xp >= 250) status = "EVOLUINDO 🚀";
-  else if (xp < 100) status = "CRÍTICO 💀";
+    let xp = 0;
+    // Lógica de Pontos
+    const pressao = Number(document.getElementById("pressao").value);
+    if (pressao === 11) xp += 50; else if (pressao === 12) xp += 30; else if (pressao === 13) xp += 10; else if (pressao >= 14) xp -= 30;
+    
+    const glicemia = Number(document.getElementById("glicemia").value);
+    if (glicemia < 99) xp += 50; else if (glicemia <= 149) xp += 30; else if (glicemia === 150) xp += 10; else if (glicemia > 150) xp -= 30;
+    
+    xp += document.getElementById("treino").value === "sim" ? 50 : -30;
+    
+    const cardio = Number(document.getElementById("cardio").value);
+    if (cardio >= 30 && cardio <= 59) xp += 50; else if (cardio >= 60) xp += 100; else xp -= 30;
+    
+    const sono = Number(document.getElementById("sono").value);
+    if (sono >= 5 && sono <= 7) xp += 50; else if (sono > 7) xp += 100; else xp -= 30;
+    
+    const estudo = Number(document.getElementById("estudo").value);
+    if (estudo >= 30 && estudo <= 60) xp += 50; else if (estudo > 60) xp += 100; else xp -= 30;
+    
+    const exercicios = Number(document.getElementById("exercicios").value);
+    if (exercicios >= 5 && exercicios <= 10) xp += 50; else if (exercicios > 10) xp += 100; else xp -= 30;
+    
+    const leitura = Number(document.getElementById("leitura").value);
+    if (leitura >= 15 && leitura <= 30) xp += 50; else if (leitura > 30) xp += 100; else xp -= 30;
+    
+    const idioma = Number(document.getElementById("idioma").value);
+    if (idioma >= 30 && idioma <= 60) xp += 50; else if (idioma > 60) xp += 100; else xp -= 30;
 
-  progresso.xpTotal += xp;
-  progresso.historico.unshift({ data: hoje, xp: xp, status: status });
-  if (progresso.historico.length > 30) progresso.historico.pop();
+    let status = "NORMAL";
+    if (xp >= 400) status = "ELITE 🔥";
+    else if (xp >= 250) status = "EVOLUINDO 🚀";
+    else if (xp < 100) status = "CRÍTICO 💀";
 
-  const divResultado = document.getElementById("resultado");
-  divResultado.style.display = "block";
-  divResultado.innerHTML = `<h2>RESULTADO</h2><span>${xp} XP</span><br>${status}`;
-  
-  salvar();
+    progresso.xpTotal += xp;
+    progresso.historico.unshift({ data: hoje, xp: xp, status: status });
+    
+    // Mantém apenas últimos 30 dias no histórico para economizar memória
+    if (progresso.historico.length > 30) progresso.historico.pop();
+
+    const divResultado = document.getElementById("resultado");
+    divResultado.style.display = "block";
+    divResultado.innerHTML = `<h2>RESULTADO</h2><span>${xp} XP</span><br>${status}`;
+    
+    salvar();
 }
 
-window.deletarItem = function(index) {
-    if(confirm("Apagar registro?")) {
+function deletarItem(index) {
+    if(confirm("Deseja apagar este registro? O XP será descontado.")) {
         progresso.xpTotal -= progresso.historico[index].xp;
         progresso.historico.splice(index, 1);
         salvar();
     }
 }
 
-window.resetarDados = function() {
-  if (confirm("⚠️ TEM CERTEZA? ISSO APAGA TUDO NA NUVEM!")) {
-    // Apenas define como null, o onValue vai detectar e limpar a tela
-    set(dbRef, null).catch((error) => alert("Erro ao resetar: " + error.message));
-  }
+function resetarDados() {
+    if(confirm("⚠️ ATENÇÃO: Isso apagará TUDO deste celular. Tem certeza?")) {
+        localStorage.removeItem("lifeRPG");
+        location.reload();
+    }
 }
+
+// ====== BACKUP (EXPORTAR/IMPORTAR) ======
+function exportarDados() {
+    const dados = JSON.stringify(progresso);
+    // Tenta copiar para a área de transferência
+    navigator.clipboard.writeText(dados).then(() => {
+        alert("✅ DADOS COPIADOS!\n\nEnvie o texto copiado para o seu novo celular (WhatsApp/Email) e use o botão 'Importar' lá.");
+    }).catch(err => {
+        // Fallback se não conseguir copiar
+        prompt("Copie o código abaixo manualmente:", dados);
+    });
+}
+
+function importarDados() {
+    const dados = prompt("Cole aqui o código que você copiou do outro celular:");
+    if (dados) {
+        try {
+            const json = JSON.parse(dados);
+            if (json.xpTotal !== undefined) {
+                progresso = json;
+                salvar();
+                alert("✅ Sucesso! Seus dados foram carregados.");
+            } else {
+                alert("❌ Código inválido.");
+            }
+        } catch (e) {
+            alert("❌ Erro ao ler os dados. Verifique se copiou tudo.");
+        }
+    }
+}
+
+// Inicializa
+atualizarInterface();
