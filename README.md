@@ -1,4 +1,4 @@
-# 🎮 Life RPG - Bruno Edition
+# 🎮 Life RPG - Bruno Alex
 
 > "A constância vence a intensidade. 1 Mês = 1 Nível."
 
