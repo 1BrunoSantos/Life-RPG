@@ -20,6 +20,7 @@ const listaMissoesPadrao = [
   { id: 18, cat: "Financeiro & Bens", titulo: "Comprar Casa Própria", atual: 0, meta: 100, unidade: "%" },
   { id: 19, cat: "Financeiro & Bens", titulo: "Comprar Moto", atual: 0, meta: 100, unidade: "%" },
   { id: 20, cat: "Financeiro & Bens", titulo: "Comprar Carro Automático", atual: 0, meta: 100, unidade: "%" },
+ { id: 21, cat: "Financeiro & Bens", titulo: "Me casar", atual: 0, meta: 100, unidade: "%" },
   // Exemplo de nova missão (use ID único):
   // { id: 21, cat: "Viagens", titulo: "Ir para a Disney", atual: 0, meta: 100, unidade: "%" },
 ];
