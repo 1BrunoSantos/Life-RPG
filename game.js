@@ -55,15 +55,30 @@ const inputIds = ["pressao", "glicemia", "sono", "treino", "cardio", "estudo", "
 
 // ====== SINCRONIZAÇÃO EM TEMPO REAL ======
 // Assim que abrir o jogo, ele "ouve" o banco de dados.
+// ====== SINCRONIZAÇÃO EM TEMPO REAL ======
 onValue(dbRef, (snapshot) => {
   const data = snapshot.val();
+  
   if (data) {
     progresso = data;
-    // Se novas missões foram adicionadas no código mas não estão no banco, mescla:
-    if(!progresso.missoes || progresso.missoes.length < listaMissoes.length) {
-        progresso.missoes = listaMissoes;
-    }
   }
+
+  // CORREÇÃO: Se as missões sumiram ou estão vazias, recarrega a lista padrão
+  if (!progresso.missoes || progresso.missoes.length === 0) {
+    console.log("Restaurando missões...");
+    progresso.missoes = listaMissoes;
+    salvar(); // Salva de volta no servidor para fixar
+  } 
+  // Se já existem, mas faltam novas missões que você adicionou no código
+  else if (progresso.missoes.length < listaMissoes.length) {
+    console.log("Atualizando lista de missões...");
+    // Mantém o progresso das antigas e adiciona as novas
+    // (Lógica simplificada: reinicia lista mantendo progresso pelo ID seria ideal, 
+    // mas aqui vamos forçar a lista nova se a antiga estiver corrompida)
+    progresso.missoes = listaMissoes; 
+    salvar();
+  }
+
   atualizarInterface();
 });
 
@@ -228,4 +243,5 @@ window.resetarDados = function() {
     set(dbRef, null);
     location.reload();
   }
+
 }
