@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// ====== SUA CONFIGURAÇÃO FIREBASE ======
+// ====== CONFIGURAÇÃO FIREBASE ======
 const firebaseConfig = {
   apiKey: "AIzaSyDjO76UYBeyJSTaflS702NOEeAqcwKgNW4",
   authDomain: "life-rpg-7f7bc.firebaseapp.com",
@@ -15,10 +15,10 @@ const firebaseConfig = {
 // Iniciar Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const dbRef = ref(db, 'jogador_alex'); // Pasta onde salva seus dados
+const dbRef = ref(db, 'jogador_alex'); 
 
-// ====== LISTA PADRÃO DE MISSÕES ======
-const listaMissoes = [
+// ====== DADOS PADRÃO ======
+const listaMissoesPadrao = [
   { id: 1, cat: "Carreira & Estudos", titulo: "Pós-Graduação Concluída", atual: 0, meta: 100, unidade: "%" },
   { id: 2, cat: "Carreira & Estudos", titulo: "Nota Alta no Enem", atual: 0, meta: 900, unidade: "pts" },
   { id: 3, cat: "Carreira & Estudos", titulo: "Eng. Elétrica IFSP (Entrar)", atual: 0, meta: 1, unidade: "check" },
@@ -44,36 +44,47 @@ const listaMissoes = [
   { id: 23, cat: "Financeiro & Bens", titulo: "Casar", atual: 0, meta: 1, unidade: "check" },
 ];
 
+// Inicializa variável local com padrão para não quebrar a tela
 let progresso = {
   xpTotal: 0,
   nivel: 1,
   historico: [],
-  missoes: listaMissoes
+  missoes: JSON.parse(JSON.stringify(listaMissoesPadrao))
 };
 
 const inputIds = ["pressao", "glicemia", "sono", "treino", "cardio", "estudo", "exercicios", "leitura", "idioma"];
 
-// ====== SINCRONIZAÇÃO EM TEMPO REAL ======
+// ====== SINCRONIZAÇÃO INTELIGENTE (SEM LOOP) ======
 onValue(dbRef, (snapshot) => {
   const data = snapshot.val();
 
-  // 1. Carrega dados do banco se existirem
   if (data) {
+    // Se tem dados na nuvem, usa eles
     progresso = data;
+    
+    // Se por algum motivo as missões estiverem vazias na nuvem, usa o padrão LOCALMENTE
+    // (Mas não salva automaticamente para evitar loops de permissão)
+    if (!progresso.missoes || progresso.missoes.length === 0) {
+      console.warn("Missões vazias na nuvem. Usando padrão local.");
+      progresso.missoes = JSON.parse(JSON.stringify(listaMissoesPadrao));
+    }
+  } else {
+    // Se a nuvem estiver vazia (null), mantém o padrão local inicial
+    console.log("Banco de dados vazio ou novo usuário.");
   }
 
-  // 2. CORREÇÃO: Se as missões sumirem (banco vazio), envia a lista padrão
-  if (!progresso.missoes || progresso.missoes.length === 0) {
-    console.log("Restaurando missões...");
-    progresso.missoes = listaMissoes;
-    salvar();
-  }
-
+  // Atualiza a tela
   atualizarInterface();
+}, (error) => {
+  console.error("Erro de permissão:", error);
+  alert("ERRO DE PERMISSÃO: O jogo não consegue salvar na nuvem.\nVá ao console do Firebase > Realtime Database > Regras e altere para '.read': true, '.write': true");
 });
 
 function salvar() {
-  set(dbRef, progresso);
+  set(dbRef, progresso).catch((error) => {
+      console.error("Erro ao salvar:", error);
+      alert("Erro ao salvar dados! Verifique sua conexão ou permissões.");
+  });
 }
 
 // === SISTEMA DE ABAS ===
@@ -94,8 +105,11 @@ function calcularNivel() {
 
 function atualizarInterface() {
   calcularNivel();
-  document.getElementById("banner-xp").innerText = `XP: ${progresso.xpTotal}`;
-  document.getElementById("nivel-display").innerText = `NÍVEL ${progresso.nivel}`;
+  const bannerXp = document.getElementById("banner-xp");
+  const nivelDisplay = document.getElementById("nivel-display");
+  
+  if (bannerXp) bannerXp.innerText = `XP: ${progresso.xpTotal}`;
+  if (nivelDisplay) nivelDisplay.innerText = `NÍVEL ${progresso.nivel}`;
 
   const listaHistorico = document.getElementById("lista-historico");
   if(listaHistorico) {
@@ -125,6 +139,8 @@ function renderizarMissoes() {
 
     let html = "";
     let categoriaAtual = "";
+    
+    if(!progresso.missoes) progresso.missoes = [];
 
     progresso.missoes.forEach((missao, index) => {
         if (missao.cat !== categoriaAtual) {
@@ -178,7 +194,8 @@ window.calcularXP = function() {
   }
 
   for (let id of inputIds) {
-    if (!document.getElementById(id).value) {
+    const el = document.getElementById(id);
+    if (!el || !el.value) {
       msgErro.innerHTML = "⚠️ Preencha tudo!";
       return;
     }
@@ -221,8 +238,9 @@ window.calcularXP = function() {
   progresso.historico.unshift({ data: hoje, xp: xp, status: status });
   if (progresso.historico.length > 30) progresso.historico.pop();
 
-  document.getElementById("resultado").style.display = "block";
-  document.getElementById("resultado").innerHTML = `<h2>RESULTADO</h2><span>${xp} XP</span><br>${status}`;
+  const divResultado = document.getElementById("resultado");
+  divResultado.style.display = "block";
+  divResultado.innerHTML = `<h2>RESULTADO</h2><span>${xp} XP</span><br>${status}`;
   
   salvar();
 }
@@ -236,26 +254,8 @@ window.deletarItem = function(index) {
 }
 
 window.resetarDados = function() {
-  if (confirm("⚠️ APAGAR TUDO DO SERVIDOR?")) {
-    set(dbRef, null);
-    location.reload();
+  if (confirm("⚠️ TEM CERTEZA? ISSO APAGA TUDO NA NUVEM!")) {
+    // Apenas define como null, o onValue vai detectar e limpar a tela
+    set(dbRef, null).catch((error) => alert("Erro ao resetar: " + error.message));
   }
-}
-window.forcarResetMissoes = function() {
-    if(confirm("Isto vai reescrever todas as missões. Continuar?")) {
-        console.log("A forçar envio de missões...");
-        
-        // Define a lista localmente
-        progresso.missoes = listaMissoes;
-        
-        // Envia para o Firebase (Força Bruta)
-        set(dbRef, progresso)
-            .then(() => {
-                alert("Sucesso! As missões foram enviadas. A página vai recarregar.");
-                location.reload();
-            })
-            .catch((erro) => {
-                alert("Erro ao enviar: " + erro);
-            });
-    }
 }
