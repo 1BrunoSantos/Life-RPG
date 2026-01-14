@@ -1,5 +1,4 @@
 // ====== LISTA PADRONIZADA ======
-// Para adicionar missões novas, acrescente linhas aqui:
 const listaMissoesPadrao = [
   { id: 1, cat: "Carreira & Estudos", titulo: "Concluir Pós-Graduação", atual: 0, meta: 100, unidade: "%" },
   { id: 2, cat: "Carreira & Estudos", titulo: "Estudar para Enem", atual: 0, meta: 100, unidade: "%" },
@@ -33,7 +32,7 @@ let progresso = JSON.parse(localStorage.getItem("lifeRPG")) || {
   missoes: JSON.parse(JSON.stringify(listaMissoesPadrao))
 };
 
-// Se faltar missões (ou usuário novo), carrega padrão
+// Se faltar missões, carrega padrão
 if (!progresso.missoes || progresso.missoes.length === 0) {
     progresso.missoes = JSON.parse(JSON.stringify(listaMissoesPadrao));
 }
@@ -56,7 +55,6 @@ function abrirTab(tabId) {
 
 // ====== INTERFACE ======
 function calcularNivel() {
-    // 1000 XP = 1 Nível
     progresso.nivel = Math.floor(progresso.xpTotal / 1000) + 1;
 }
 
@@ -147,7 +145,7 @@ function renderizarMissoes() {
 
 function alterarProgresso(index, valor) {
     let missao = progresso.missoes[index];
-    missao.atual += (valor * 5); // Incremento de 5%
+    missao.atual += (valor * 5); // Incremento 5%
     if (missao.atual < 0) missao.atual = 0;
     if (missao.atual > 100) missao.atual = 100;
     salvar();
@@ -163,7 +161,6 @@ function calcularXP() {
         return;
     }
 
-    // CAPTURA
     const vPressao = document.getElementById("pressao").value;
     const vGlicemia = document.getElementById("glicemia").value;
     const vAcucar = document.getElementById("acucar").value;
@@ -184,52 +181,60 @@ function calcularXP() {
 
     let xp = 0;
     
-    // === PONTUAÇÃO (Ajuste Fino) ===
+    // === CÁLCULO DE PONTUAÇÃO (COM PENALIDADES) ===
 
-    // Pressão: 12(3xp), 11(5xp), 13(2xp), >=14(-5xp)
+    // Pressão
     const pressao = Number(vPressao);
     if (pressao === 11) xp += 5; 
     else if (pressao === 12) xp += 3; 
     else if (pressao === 13) xp += 2; 
     else if (pressao >= 14) xp -= 5;
     
-    // Glicemia: <99(5xp), 99-110(3xp), >120(-5xp)
+    // Glicemia
     const glicemia = Number(vGlicemia);
     if (glicemia < 99) xp += 5; 
     else if (glicemia <= 110) xp += 3; 
     else if (glicemia > 120) xp -= 5;
     
-    // Açúcar: Não(5xp), Sim(-5xp)
+    // Açúcar
     if (vAcucar === "nao") xp += 5; 
     else xp -= 5;
     
-    // Sono: 7h+(5xp), 5h-6h(3xp), <5h(-5xp)
+    // Sono
     const sono = Number(vSono);
     if (sono >= 7) xp += 5; 
     else if (sono >= 5) xp += 3; 
     else xp -= 5;
 
-    // Treino: Sim(5xp), Não(-5xp)
+    // Treino
     xp += vTreino === "sim" ? 5 : -5;
     
-    // Cardio: 60min(5xp), 30min(3xp), <30(-5xp)
+    // Cardio
     const cardio = Number(vCardio);
     if (cardio >= 60) xp += 5; 
     else if (cardio >= 30) xp += 3; 
     else xp -= 5;
     
-    // Estudos/Mente
+    // Estudos/Mente (COM PENALIDADES DE -5 SE NÃO ATINGIR O MÍNIMO)
     const estudo = Number(vEstudo);
-    if (estudo >= 60) xp += 5; else if (estudo >= 30) xp += 3; 
+    if (estudo >= 60) xp += 5; 
+    else if (estudo >= 30) xp += 3; 
+    else xp -= 5; // < 30 min
     
     const exercicios = Number(vExercicios);
-    if (exercicios >= 10) xp += 5; else if (exercicios >= 5) xp += 3; 
+    if (exercicios >= 10) xp += 5; 
+    else if (exercicios >= 5) xp += 3; 
+    else xp -= 5; // < 5 contas
     
     const leitura = Number(vLeitura);
-    if (leitura >= 30) xp += 5; else if (leitura >= 15) xp += 3; 
+    if (leitura >= 30) xp += 5; 
+    else if (leitura >= 15) xp += 3; 
+    else xp -= 5; // < 15 min
     
     const idioma = Number(vIdioma);
-    if (idioma >= 60) xp += 5; else if (idioma >= 30) xp += 3; 
+    if (idioma >= 60) xp += 5; 
+    else if (idioma >= 30) xp += 3; 
+    else xp -= 5; // < 30 min
 
     // Status
     let status = "NORMAL";
@@ -239,7 +244,6 @@ function calcularXP() {
 
     progresso.xpTotal += xp;
     
-    // Salva Histórico
     progresso.historico.unshift({
         data: hoje,
         xp: xp,
