@@ -46,10 +46,6 @@ input, select { width: 100%; margin-bottom: 5px; padding: 12px; border-radius: 8
 .barra-progresso { height: 100%; background: linear-gradient(90deg, #10b981, #059669); width: 0%; transition: width 0.3s; }
 .botoes-progresso { display: flex; justify-content: flex-end; gap: 15px; margin-top: 10px; }
 
-/* Nova Missão Form */
-.panel-nova-missao { background: #1e293b; padding: 15px; border-radius: 10px; margin-top: 30px; border: 1px dashed #475569; }
-.panel-nova-missao h3 { margin-top: 0; color: #e2e8f0; font-size: 18px; text-align: center; }
-
 /* === HISTÓRICO DETALHADO === */
 .historico-item { border-bottom: 1px solid #334155; padding: 15px 0; }
 .historico-cabecalho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
