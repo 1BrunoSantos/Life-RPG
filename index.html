@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Life RPG - Bruno Alex</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="hud">
+    <h1>LIFE RPG</h1>
+    
+    <div class="status-header">
+        <div id="nivel-display">NÍVEL 1</div>
+        <div id="banner-xp" class="xp-banner">XP: 0</div>
+    </div>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="abrirTab('tab-status')">STATUS</button>
+        <button class="tab-btn" onclick="abrirTab('tab-missoes')">MISSÕES</button>
+        <button class="tab-btn" onclick="abrirTab('tab-diario')">DIÁRIO</button>
+    </div>
+
+    <div id="tab-status" class="tab-content active">
+        <p class="subtitle">Check-in Diário</p>
+
+        <div class="panel">
+            <h2>🩺 Saúde</h2>
+            <input type="number" id="pressao" placeholder="Pressão (Ex: 12)">
+            <div class="regras">🎯 11 (50xp) | 12 (30xp) | 13 (10xp) | ≥14 (-30xp)</div>
+
+            <input type="number" id="glicemia" placeholder="Glicemia (Ex: 98)">
+            <div class="regras">🎯 &lt;99 (50xp) | 99-149 (30xp) | 150 (10xp) | &gt;150 (-30xp)</div>
+
+            <input type="number" id="sono" placeholder="Sono (horas)">
+            <div class="regras">🎯 5h-7h (50xp) | &gt;7h (100xp) | Outros (-30xp)</div>
+        </div>
+
+        <div class="panel">
+            <h2>🏋️ Corpo</h2>
+            <select id="treino">
+                <option value="" disabled selected>Foi na Academia?</option>
+                <option value="sim">Academia: Sim</option>
+                <option value="nao">Academia: Não</option>
+            </select>
+            <div class="regras">🎯 Sim (50xp) | Não (-30xp)</div>
+
+            <input type="number" id="cardio" placeholder="Cardio (min)">
+            <div class="regras">🎯 30-59min (50xp) | ≥60min (100xp) | &lt;30 (-30xp)</div>
+        </div>
+
+        <div class="panel">
+            <h2>🧠 Mente</h2>
+            <input type="number" id="estudo" placeholder="Estudo (min)">
+            <div class="regras">🎯 30-60min (50xp) | &gt;60min (100xp) | &lt;30 (-30xp)</div>
+
+            <input type="number" id="exercicios" placeholder="Exercícios (qntd)">
+            <div class="regras">🎯 5-10 contas (50xp) | &gt;10 (100xp) | &lt;5 (-30xp)</div>
+
+            <input type="number" id="leitura" placeholder="Leitura (min)">
+            <div class="regras">🎯 15-30min (50xp) | &gt;30min (100xp) | &lt;15 (-30xp)</div>
+
+            <input type="number" id="idioma" placeholder="Idioma (min)">
+            <div class="regras">🎯 30-60min (50xp) | &gt;60min (100xp) | &lt;30 (-30xp)</div>
+        </div>
+
+        <button onclick="calcularXP()" class="btn-action">CALCULAR XP DO DIA</button>
+        <div id="msg-erro" class="error-msg"></div>
+        <div id="resultado" class="resultado" style="display:none;"></div>
+    </div>
+
+    <div id="tab-missoes" class="tab-content">
+        <p class="subtitle">Quest Log (Progresso)</p>
+        <div id="container-missoes">
+            </div>
+    </div>
+
+    <div id="tab-diario" class="tab-content">
+        <div class="historico-container">
+            <h3>📜 Registro de Batalha</h3>
+            <div id="lista-historico"></div>
+        </div>
+        <button onclick="resetarDados()" class="btn-reset">🗑️ RESETAR TODO O JOGO</button>
+    </div>
+
+  </div>
+
+  <script type="module" src="game.js"></script>
+</body>
+</html>

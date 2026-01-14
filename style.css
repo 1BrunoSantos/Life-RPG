@@ -1,0 +1,224 @@
+/* === GERAL === */
+* { box-sizing: border-box; font-family: 'Roboto', sans-serif; -webkit-tap-highlight-color: transparent; }
+
+body { 
+  margin: 0; 
+  background: radial-gradient(circle at top, #0f2027, #000); 
+  color: #e0f2ff; 
+  padding-bottom: 80px; /* Espaço extra no final para scroll no celular */
+  overflow-x: hidden; /* Evita rolagem lateral indesejada */
+}
+
+/* Centraliza e limita largura para não ficar esticado em Tablets/PC */
+.hud { 
+  max-width: 450px; 
+  margin: auto; 
+  padding: 15px; 
+}
+
+/* === HEADER E LEVEL === */
+h1 { 
+  font-family: 'Bangers', cursive; 
+  text-align: center; 
+  font-size: 38px; /* Levemente menor para não quebrar em telas pequenas */
+  color: #fff; 
+  text-shadow: 0 0 10px #0ea5e9; 
+  margin: 10px 0; 
+}
+
+.subtitle { text-align: center; font-size: 14px; opacity: 0.8; margin-bottom: 15px; }
+
+.status-header { display: flex; gap: 8px; margin-bottom: 15px; }
+
+#nivel-display, .xp-banner {
+  font-family: 'Bangers', cursive; 
+  font-size: 20px; /* Ajustado para caber lado a lado */
+  padding: 12px 5px;
+  border-radius: 8px; 
+  border: 2px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#nivel-display { background: #3b82f6; flex: 1; }
+.xp-banner { background: linear-gradient(90deg, #f59e0b, #d97706); flex: 2; text-shadow: 1px 1px 0 #000; }
+
+/* === SISTEMA DE ABAS (TABS) === */
+.nav-tabs { 
+  display: flex; 
+  justify-content: space-between; 
+  margin-bottom: 20px; 
+  background: #1e293b; 
+  border-radius: 12px; 
+  padding: 4px; 
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.tab-btn { 
+  background: transparent; 
+  border: none; 
+  color: #94a3b8; 
+  font-family: 'Bangers', cursive; 
+  font-size: 16px; 
+  padding: 10px 0; 
+  cursor: pointer; 
+  flex: 1; 
+  margin: 0; 
+  transition: all 0.2s;
+}
+
+.tab-btn.active { 
+  color: #fff; 
+  background: #334155; 
+  border-radius: 8px; 
+  text-shadow: 0 0 5px #0ea5e9; 
+  transform: scale(1.05);
+}
+
+.tab-content { display: none; animation: fadeIn 0.3s; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+/* === PAINÉIS INPUT === */
+.panel { 
+  background: rgba(20, 40, 60, 0.85); 
+  border: 1px solid rgba(0, 180, 255, 0.25); 
+  border-radius: 12px; 
+  padding: 15px; 
+  margin-bottom: 15px; 
+}
+
+.panel h2 { 
+  font-family: 'Bangers', cursive; 
+  margin: 0 0 12px 0; 
+  font-size: 22px; 
+  color: #7dd3fc; 
+  border-bottom: 1px solid rgba(125, 211, 252, 0.2); 
+}
+
+/* Inputs otimizados para toque */
+input, select { 
+  width: 100%; 
+  margin-bottom: 5px; 
+  padding: 12px; /* Área de toque maior */
+  border-radius: 8px; 
+  border: 1px solid #334155; 
+  background: #020617; 
+  color: #fff; 
+  font-size: 16px; /* Evita zoom no iPhone */
+}
+
+input:focus, select:focus { outline: none; border-color: #0ea5e9; }
+
+.regras { font-size: 11px; color: #94a3b8; margin-bottom: 15px; font-weight: 400; line-height: 1.4; }
+
+/* === MISSÕES (QUESTS) === */
+.categoria-titulo { 
+  color: #facc15; 
+  font-family: 'Bangers', cursive; 
+  font-size: 22px; 
+  margin-top: 25px; 
+  border-bottom: 1px solid #facc15; 
+  padding-bottom: 5px;
+}
+
+.missao-card { 
+  background: #1e293b; 
+  border-radius: 10px; 
+  padding: 12px; 
+  margin-bottom: 12px; 
+  border-left: 5px solid #0ea5e9; 
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.missao-header { 
+  display: flex; 
+  justify-content: space-between; 
+  font-weight: bold; 
+  font-size: 13px; /* Ajuste para textos longos não quebrarem */
+  margin-bottom: 8px; 
+}
+
+.barra-fundo { width: 100%; background: #0f172a; height: 14px; border-radius: 7px; overflow: hidden; }
+.barra-progresso { height: 100%; background: linear-gradient(90deg, #10b981, #059669); width: 0%; transition: width 0.3s; }
+
+.botoes-progresso { display: flex; justify-content: flex-end; gap: 15px; margin-top: 10px; }
+
+/* Botões de + e - grandes para dedo */
+.btn-small { 
+  width: 40px; 
+  height: 35px;
+  font-size: 18px; 
+  margin: 0; 
+  border-radius: 6px; 
+  font-family: 'Roboto', sans-serif; 
+  font-weight: bold; 
+  background: #334155; 
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* === BOTÕES GERAIS === */
+.btn-action { 
+  width: 100%; 
+  padding: 16px; 
+  background: linear-gradient(135deg, #0ea5e9, #0369a1); 
+  border: none; 
+  border-radius: 12px; 
+  color: white; 
+  font-family: 'Bangers', cursive; 
+  font-size: 22px; 
+  cursor: pointer; 
+  margin-top: 15px; 
+  box-shadow: 0 4px 0 #004e7a; /* Efeito 3D */
+}
+
+.btn-action:active { transform: translateY(4px); box-shadow: none; }
+
+.btn-reset { 
+  width: 100%; 
+  padding: 14px; 
+  margin-top: 30px; 
+  background: #b91c1c; 
+  border: none; 
+  border-radius: 10px; 
+  color: white; 
+  font-weight: bold; 
+}
+
+.error-msg { color: #ff4d4d; text-align: center; margin-top: 15px; font-weight: bold; }
+
+.resultado { 
+  margin-top: 20px; 
+  padding: 20px; 
+  border-radius: 12px; 
+  background: #1e293b; 
+  border: 2px solid #fbbf24; 
+  text-align: center; 
+  font-size: 18px; 
+  color: #bae6fd; 
+  animation: fadeIn 0.5s;
+}
+
+/* === HISTÓRICO === */
+.historico-item { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  border-bottom: 1px solid #334155; 
+  padding: 15px 0; 
+}
+
+.dados-dia { display: flex; gap: 10px; font-size: 13px; align-items: center; }
+.btn-lixeira { background: transparent; border: none; font-size: 20px; padding: 10px; }
+
+/* Ajuste específico para telas muito pequenas (iPhone SE, etc) */
+@media (max-width: 360px) {
+  .nav-tabs { gap: 2px; }
+  .tab-btn { font-size: 14px; padding: 8px 0; }
+  .dados-dia { flex-direction: column; align-items: flex-start; gap: 2px; }
+}
