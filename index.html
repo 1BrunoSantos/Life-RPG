@@ -29,8 +29,11 @@
         <div class="panel">
             <h2>🩺 Saúde</h2>
             
-            <input type="number" id="pressao" placeholder="Pressão (Ex: 12)">
-            <div class="regras">🎯 12 (3xp) | 11 (5xp) | 13 (2xp) | ≥14 (-5xp)</div>
+            <div style="display: flex; gap: 10px;">
+                <input type="number" id="pressao_sis" placeholder="Sist. (Ex: 12)" style="width: 50%;">
+                <input type="number" id="pressao_dia" placeholder="Diast. (Ex: 8)" style="width: 50%;">
+            </div>
+            <div class="regras">🎯 12/8 (3xp) | 11/7 (5xp) | 13/x (2xp) | ≥14 (-5xp)</div>
 
             <input type="number" id="glicemia" placeholder="Glicemia (Ex: 98)">
             <div class="regras">🎯 99-110 (3xp) | &lt;99 (5xp) | &gt;120 (-5xp)</div>
