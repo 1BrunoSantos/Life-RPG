@@ -1,4 +1,5 @@
 // ====== LISTA PADRONIZADA ======
+// Para adicionar missões novas, acrescente linhas aqui:
 const listaMissoesPadrao = [
   { id: 1, cat: "Carreira & Estudos", titulo: "Concluir Pós-Graduação", atual: 0, meta: 100, unidade: "%" },
   { id: 2, cat: "Carreira & Estudos", titulo: "Estudar para Enem", atual: 0, meta: 100, unidade: "%" },
@@ -32,6 +33,7 @@ let progresso = JSON.parse(localStorage.getItem("lifeRPG")) || {
   missoes: JSON.parse(JSON.stringify(listaMissoesPadrao))
 };
 
+// Se faltar missões (ou usuário novo), carrega padrão
 if (!progresso.missoes || progresso.missoes.length === 0) {
     progresso.missoes = JSON.parse(JSON.stringify(listaMissoesPadrao));
 }
@@ -54,7 +56,7 @@ function abrirTab(tabId) {
 
 // ====== INTERFACE ======
 function calcularNivel() {
-    // Novo Sistema: 1000 XP = 1 Nível
+    // 1000 XP = 1 Nível
     progresso.nivel = Math.floor(progresso.xpTotal / 1000) + 1;
 }
 
@@ -66,7 +68,7 @@ function atualizarInterface() {
     if(xpBanner) xpBanner.innerText = `XP: ${progresso.xpTotal}`;
     if(nivelDisplay) nivelDisplay.innerText = `NÍVEL ${progresso.nivel}`;
 
-    // === HISTÓRICO COM DETALHES E AÇÚCAR ===
+    // === HISTÓRICO ===
     const listaHistorico = document.getElementById("lista-historico");
     if(listaHistorico) {
         let html = "";
@@ -76,7 +78,6 @@ function atualizarInterface() {
             let cor = dia.xp >= 0 ? "#4ade80" : "#f87171";
             let det = dia.detalhes || {};
 
-            // Formata o açúcar para exibição
             let textoAcucar = det.acucar === "nao" ? "🚫 Zero" : "🍬 Comeu";
 
             html += `
@@ -146,13 +147,11 @@ function renderizarMissoes() {
 
 function alterarProgresso(index, valor) {
     let missao = progresso.missoes[index];
-    missao.atual += (valor * 5);
+    missao.atual += (valor * 5); // Incremento de 5%
     if (missao.atual < 0) missao.atual = 0;
     if (missao.atual > 100) missao.atual = 100;
     salvar();
 }
-
-
 
 function calcularXP() {
     const msgErro = document.getElementById("msg-erro");
@@ -164,10 +163,10 @@ function calcularXP() {
         return;
     }
 
-    // CAPTURA VALORES
+    // CAPTURA
     const vPressao = document.getElementById("pressao").value;
     const vGlicemia = document.getElementById("glicemia").value;
-    const vAcucar = document.getElementById("acucar").value; // NOVO
+    const vAcucar = document.getElementById("acucar").value;
     const vSono = document.getElementById("sono").value;
     const vTreino = document.getElementById("treino").value;
     const vCardio = document.getElementById("cardio").value;
@@ -184,64 +183,58 @@ function calcularXP() {
     }
 
     let xp = 0;
-    // === NOVA LÓGICA DE PONTUAÇÃO (Calibrada para ~33 XP/dia) ===
     
-    // Pressão: 12 é o ideal padrão (3xp), 11 é ótimo (5xp)
+    // === PONTUAÇÃO (Ajuste Fino) ===
+
+    // Pressão: 12(3xp), 11(5xp), 13(2xp), >=14(-5xp)
     const pressao = Number(vPressao);
     if (pressao === 11) xp += 5; 
     else if (pressao === 12) xp += 3; 
-    else if (pressao === 13) xp += 1; 
+    else if (pressao === 13) xp += 2; 
     else if (pressao >= 14) xp -= 5;
     
-    // Glicemia: <99 é excelente (5xp), até 110 é ok (3xp)
+    // Glicemia: <99(5xp), 99-110(3xp), >120(-5xp)
     const glicemia = Number(vGlicemia);
     if (glicemia < 99) xp += 5; 
     else if (glicemia <= 110) xp += 3; 
     else if (glicemia > 120) xp -= 5;
     
-    // Açúcar (Peso alto na decisão)
-    if (vAcucar === "nao") xp += 4; // Bônus por resistir
-    else xp -= 4; // Penalidade
+    // Açúcar: Não(5xp), Sim(-5xp)
+    if (vAcucar === "nao") xp += 5; 
+    else xp -= 5;
     
-    // Treino (Peso alto)
-    xp += vTreino === "sim" ? 4 : -4;
+    // Sono: 7h+(5xp), 5h-6h(3xp), <5h(-5xp)
+    const sono = Number(vSono);
+    if (sono >= 7) xp += 5; 
+    else if (sono >= 5) xp += 3; 
+    else xp -= 5;
+
+    // Treino: Sim(5xp), Não(-5xp)
+    xp += vTreino === "sim" ? 5 : -5;
     
-    // Cardio
+    // Cardio: 60min(5xp), 30min(3xp), <30(-5xp)
     const cardio = Number(vCardio);
     if (cardio >= 60) xp += 5; 
     else if (cardio >= 30) xp += 3; 
-    else xp -= 3;
-    
-    // Sono
-    const sono = Number(vSono);
-    if (sono >= 7) xp += 5; 
-    else if (sono >= 6) xp += 3; 
     else xp -= 5;
     
-    // Estudo
+    // Estudos/Mente
     const estudo = Number(vEstudo);
-    if (estudo >= 60) xp += 5; 
-    else if (estudo >= 30) xp += 3; 
+    if (estudo >= 60) xp += 5; else if (estudo >= 30) xp += 3; 
     
-    // Exercícios
     const exercicios = Number(vExercicios);
-    if (exercicios >= 10) xp += 5; 
-    else if (exercicios >= 5) xp += 3; 
+    if (exercicios >= 10) xp += 5; else if (exercicios >= 5) xp += 3; 
     
-    // Leitura
     const leitura = Number(vLeitura);
-    if (leitura >= 30) xp += 5; 
-    else if (leitura >= 15) xp += 3; 
+    if (leitura >= 30) xp += 5; else if (leitura >= 15) xp += 3; 
     
-    // Idioma
     const idioma = Number(vIdioma);
-    if (idioma >= 60) xp += 5; 
-    else if (idioma >= 30) xp += 3; 
+    if (idioma >= 60) xp += 5; else if (idioma >= 30) xp += 3; 
 
     // Status
     let status = "NORMAL";
-    if (xp >= 40) status = "ELITE 🔥"; // Dia perfeito (~45xp)
-    else if (xp >= 30) status = "BOM 🚀"; // Dia meta (~33xp)
+    if (xp >= 40) status = "ELITE 🔥"; 
+    else if (xp >= 30) status = "BOM 🚀"; 
     else if (xp < 10) status = "CRÍTICO 💀";
 
     progresso.xpTotal += xp;
