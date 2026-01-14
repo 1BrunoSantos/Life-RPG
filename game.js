@@ -22,7 +22,7 @@ const listaMissoesPadrao = [
   { id: 20, cat: "Financeiro & Bens", titulo: "Comprar Carro Automático", atual: 0, meta: 100, unidade: "%" },
 ];
 
-const inputIds = ["pressao", "glicemia", "acucar", "sono", "treino", "cardio", "estudo", "exercicios", "leitura", "idioma"];
+const inputIds = ["pressao_sis", "pressao_dia", "glicemia", "acucar", "sono", "treino", "cardio", "estudo", "exercicios", "leitura", "idioma"];
 
 // ====== INICIALIZAÇÃO ======
 let progresso = JSON.parse(localStorage.getItem("lifeRPG")) || {
@@ -53,56 +53,41 @@ function abrirTab(tabId) {
 }
 
 // ====== LÓGICA DE DATAS E PENALIDADES ======
-
-// Converte string "DD/MM/AAAA" para objeto Date
 function stringParaData(dataStr) {
     if(!dataStr) return new Date();
     const partes = dataStr.split('/');
     return new Date(partes[2], partes[1] - 1, partes[0]);
 }
 
-// Verifica se pulou algum dia e aplica a PENALIDADE AUTOMÁTICA
 function verificarDiasPerdidos() {
     if (!progresso.historico || progresso.historico.length === 0) return;
-
     const hojeStr = new Date().toLocaleDateString("pt-BR");
     const ultimoRegistroStr = progresso.historico[0].data;
-
-    // Se o último registro é de hoje, está tudo certo
     if (hojeStr === ultimoRegistroStr) return;
 
     const dataHoje = stringParaData(hojeStr);
     const dataUltimo = stringParaData(ultimoRegistroStr);
-
-    // Calcula diferença de dias
     const diffTempo = dataHoje - dataUltimo;
     const diffDias = Math.ceil(diffTempo / (1000 * 60 * 60 * 24)); 
-    
-    // Se a diferença for maior que 1, significa que existem dias não preenchidos no meio
-    // Ex: Último dia 10, Hoje dia 12. Diff = 2. O dia 11 ficou vazio.
-    // O loop preenche esses buracos com penalidade máxima.
     
     let diasPenalizados = 0;
 
     for (let i = 1; i < diffDias; i++) {
         let diaPerdido = new Date(dataHoje);
-        diaPerdido.setDate(dataHoje.getDate() - i); // Volta no tempo
-        
+        diaPerdido.setDate(dataHoje.getDate() - i); 
         let dataPerdidaStr = diaPerdido.toLocaleDateString("pt-BR");
         
-        // Proteção contra duplicidade
+        // Verifica se já não existe (para não duplicar)
         if (!progresso.historico.find(d => d.data === dataPerdidaStr)) {
-            // APLICA PENALIDADE MÁXIMA (-50 XP)
-            // (10 itens vazios * -5 pontos cada)
             let xpPerdido = -50; 
             let status = "ESQUECEU 💀";
-            
             progresso.historico.unshift({
                 data: dataPerdidaStr,
                 xp: xpPerdido,
                 status: status,
                 detalhes: {
-                    pressao: "N/A",
+                    pressao_sis: "N/A", 
+                    pressao_dia: "N/A",
                     glicemia: "N/A",
                     acucar: "N/A",
                     sono: "N/A",
@@ -114,13 +99,12 @@ function verificarDiasPerdidos() {
                     idioma: "N/A"
                 }
             });
-            
             progresso.xpTotal += xpPerdido;
             diasPenalizados++;
         }
     }
     
-    // Reordena o histórico por data para garantir
+    // Reordena
     progresso.historico.sort((a, b) => stringParaData(b.data) - stringParaData(a.data));
     
     if (diasPenalizados > 0) {
@@ -129,10 +113,10 @@ function verificarDiasPerdidos() {
     }
 }
 
-// Checa a data a cada minuto (caso esteja com o app aberto na virada da noite)
+// Verifica periodicamente (ex: virada de noite com app aberto)
 setInterval(() => {
     verificarDiasPerdidos();
-    carregarDadosHoje(); // Atualiza a tela se virou o dia
+    carregarDadosHoje();
 }, 60000);
 
 
@@ -145,7 +129,7 @@ function carregarDadosHoje() {
     const hoje = new Date().toLocaleDateString("pt-BR");
     const registroHoje = progresso.historico.find(dia => dia.data === hoje);
 
-    // Limpa inputs primeiro
+    // Limpa inputs
     inputIds.forEach(id => {
         const el = document.getElementById(id);
         if(el) el.value = ""; 
@@ -170,7 +154,7 @@ function atualizarInterface() {
     if(xpBanner) xpBanner.innerText = `XP: ${progresso.xpTotal}`;
     if(nivelDisplay) nivelDisplay.innerText = `NÍVEL ${progresso.nivel}`;
 
-    // === HISTÓRICO ===
+    // === HISTÓRICO ATUALIZADO ===
     const listaHistorico = document.getElementById("lista-historico");
     if(listaHistorico) {
         let html = "";
@@ -180,6 +164,7 @@ function atualizarInterface() {
             let cor = dia.xp >= 0 ? "#4ade80" : "#f87171";
             let det = dia.detalhes || {};
             let textoAcucar = det.acucar === "nao" ? "🚫 Zero" : (det.acucar === "sim" ? "🍬 Comeu" : "-");
+            let textoPressao = (det.pressao_sis && det.pressao_dia) ? `${det.pressao_sis}/${det.pressao_dia}` : (det.pressao_sis || '-');
 
             html += `
             <div class="historico-item">
@@ -190,7 +175,7 @@ function atualizarInterface() {
                 </div>
                 
                 <div class="historico-detalhes">
-                    <span>🩺 Pressão: <b style="color:#fff">${det.pressao || '-'}</b></span>
+                    <span>🩺 Pressão: <b style="color:#fff">${textoPressao}</b></span>
                     <span>🩸 Glicemia: <b style="color:#fff">${det.glicemia || '-'}</b></span>
                     <span>🚫 Açúcar: <b style="color:#fff">${textoAcucar}</b></span>
                     <span>😴 Sono: <b style="color:#fff">${det.sono || '-'}h</b></span>
@@ -261,13 +246,11 @@ function calcularXP() {
     
     const indexHoje = progresso.historico.findIndex(dia => dia.data === hoje);
     let xpAnterior = 0;
-
-    if (indexHoje !== -1) {
-        xpAnterior = progresso.historico[indexHoje].xp;
-    }
+    if (indexHoje !== -1) xpAnterior = progresso.historico[indexHoje].xp;
 
     // CAPTURA
-    const vPressao = document.getElementById("pressao").value;
+    const vPressaoSis = document.getElementById("pressao_sis").value;
+    const vPressaoDia = document.getElementById("pressao_dia").value;
     const vGlicemia = document.getElementById("glicemia").value;
     const vAcucar = document.getElementById("acucar").value;
     const vSono = document.getElementById("sono").value;
@@ -281,15 +264,16 @@ function calcularXP() {
     let xp = 0;
     
     // === CÁLCULO ===
-    // (Vazio "" conta como penalidade -5)
+    
+    // Pressão (Sis)
+    let sistolica = Number(vPressaoSis);
+    if (sistolica > 50) sistolica = Math.floor(sistolica / 10);
 
-    // Pressão
-    const pressao = Number(vPressao);
-    if (vPressao !== "" && pressao === 11) xp += 5; 
-    else if (vPressao !== "" && pressao === 12) xp += 3; 
-    else if (vPressao !== "" && pressao === 13) xp += 2; 
-    else if (vPressao !== "" && pressao >= 14) xp -= 5;
-    else xp -= 5; // Vazio/Punição
+    if (vPressaoSis !== "" && sistolica === 11) xp += 5; 
+    else if (vPressaoSis !== "" && sistolica === 12) xp += 3; 
+    else if (vPressaoSis !== "" && sistolica === 13) xp += 2; 
+    else if (vPressaoSis !== "" && sistolica >= 14) xp -= 5;
+    else xp -= 5; // Vazio ou < 11
 
     // Glicemia
     const glicemia = Number(vGlicemia);
@@ -316,7 +300,7 @@ function calcularXP() {
     else if (vCardio !== "" && cardio >= 30) xp += 3; 
     else xp -= 5;
     
-    // Mente
+    // Mente (Com Penalidade)
     const estudo = Number(vEstudo);
     if (vEstudo !== "" && estudo >= 60) xp += 5; 
     else if (vEstudo !== "" && estudo >= 30) xp += 3; 
@@ -350,7 +334,8 @@ function calcularXP() {
         xp: xp,
         status: status,
         detalhes: {
-            pressao: vPressao,
+            pressao_sis: vPressaoSis,
+            pressao_dia: vPressaoDia,
             glicemia: vGlicemia,
             acucar: vAcucar,
             sono: vSono,
@@ -413,7 +398,6 @@ function importarDados() {
     }
 }
 
-// Inicia verificação e carregamento
 verificarDiasPerdidos();
 carregarDadosHoje();
 atualizarInterface();
