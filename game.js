@@ -1,8 +1,8 @@
-// ====== IMPORTAR O FIREBASE (Cérebro na Nuvem) ======
+// ====== IMPORTAR O FIREBASE ======
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// ====== SUA CONFIGURAÇÃO (Corrigida) ======
+// ====== SUA CONFIGURAÇÃO FIREBASE ======
 const firebaseConfig = {
   apiKey: "AIzaSyDjO76UYBeyJSTaflS702NOEeAqcwKgNW4",
   authDomain: "life-rpg-7f7bc.firebaseapp.com",
@@ -15,9 +15,9 @@ const firebaseConfig = {
 // Iniciar Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const dbRef = ref(db, 'jogador_alex'); // Nome da sua pasta na nuvem
+const dbRef = ref(db, 'jogador_alex'); // Pasta onde salva seus dados
 
-// ====== CONFIGURAÇÃO DAS MISSÕES ======
+// ====== LISTA PADRÃO DE MISSÕES ======
 const listaMissoes = [
   { id: 1, cat: "Carreira & Estudos", titulo: "Pós-Graduação Concluída", atual: 0, meta: 100, unidade: "%" },
   { id: 2, cat: "Carreira & Estudos", titulo: "Nota Alta no Enem", atual: 0, meta: 900, unidade: "pts" },
@@ -54,35 +54,25 @@ let progresso = {
 const inputIds = ["pressao", "glicemia", "sono", "treino", "cardio", "estudo", "exercicios", "leitura", "idioma"];
 
 // ====== SINCRONIZAÇÃO EM TEMPO REAL ======
-// Assim que abrir o jogo, ele "ouve" o banco de dados.
-// ====== SINCRONIZAÇÃO EM TEMPO REAL ======
-// ====== SINCRONIZAÇÃO EM TEMPO REAL ======
 onValue(dbRef, (snapshot) => {
   const data = snapshot.val();
 
-  // 1. Se existirem dados no banco, carregamos para a variável local
+  // 1. Carrega dados do banco se existirem
   if (data) {
     progresso = data;
   }
 
-  // 2. CORREÇÃO DE BUG: Verificação de Segurança
-  // Se "progresso.missoes" não existe OU estiver vazio...
+  // 2. CORREÇÃO: Se as missões sumirem (banco vazio), envia a lista padrão
   if (!progresso.missoes || progresso.missoes.length === 0) {
-    console.log("⚠️ Missões não encontradas no banco. Restaurando padrão...");
-    
-    // Força a lista padrão (que está escrita lá em cima no código)
+    console.log("Restaurando missões...");
     progresso.missoes = listaMissoes;
-    
-    // Salva imediatamente no Firebase para corrigir o problema para sempre
     salvar();
   }
 
-  // 3. Atualiza a tela
   atualizarInterface();
 });
 
 function salvar() {
-  // Envia para a nuvem
   set(dbRef, progresso);
 }
 
@@ -198,19 +188,27 @@ window.calcularXP = function() {
   // Lógica de cálculo
   const pressao = Number(document.getElementById("pressao").value);
   if (pressao === 11) xp += 50; else if (pressao === 12) xp += 30; else if (pressao === 13) xp += 10; else if (pressao >= 14) xp -= 30;
+  
   const glicemia = Number(document.getElementById("glicemia").value);
   if (glicemia < 99) xp += 50; else if (glicemia <= 149) xp += 30; else if (glicemia === 150) xp += 10; else if (glicemia > 150) xp -= 30;
+  
   xp += document.getElementById("treino").value === "sim" ? 50 : -30;
+  
   const cardio = Number(document.getElementById("cardio").value);
   if (cardio >= 30 && cardio <= 59) xp += 50; else if (cardio >= 60) xp += 100; else xp -= 30;
+  
   const sono = Number(document.getElementById("sono").value);
   if (sono >= 5 && sono <= 7) xp += 50; else if (sono > 7) xp += 100; else xp -= 30;
+  
   const estudo = Number(document.getElementById("estudo").value);
   if (estudo >= 30 && estudo <= 60) xp += 50; else if (estudo > 60) xp += 100; else xp -= 30;
+  
   const exercicios = Number(document.getElementById("exercicios").value);
   if (exercicios >= 5 && exercicios <= 10) xp += 50; else if (exercicios > 10) xp += 100; else xp -= 30;
+  
   const leitura = Number(document.getElementById("leitura").value);
   if (leitura >= 15 && leitura <= 30) xp += 50; else if (leitura > 30) xp += 100; else xp -= 30;
+  
   const idioma = Number(document.getElementById("idioma").value);
   if (idioma >= 30 && idioma <= 60) xp += 50; else if (idioma > 60) xp += 100; else xp -= 30;
 
@@ -242,6 +240,4 @@ window.resetarDados = function() {
     set(dbRef, null);
     location.reload();
   }
-
 }
-
