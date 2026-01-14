@@ -56,29 +56,28 @@ const inputIds = ["pressao", "glicemia", "sono", "treino", "cardio", "estudo", "
 // ====== SINCRONIZAÇÃO EM TEMPO REAL ======
 // Assim que abrir o jogo, ele "ouve" o banco de dados.
 // ====== SINCRONIZAÇÃO EM TEMPO REAL ======
+// ====== SINCRONIZAÇÃO EM TEMPO REAL ======
 onValue(dbRef, (snapshot) => {
   const data = snapshot.val();
-  
+
+  // 1. Se existirem dados no banco, carregamos para a variável local
   if (data) {
     progresso = data;
   }
 
-  // CORREÇÃO: Se as missões sumiram ou estão vazias, recarrega a lista padrão
+  // 2. CORREÇÃO DE BUG: Verificação de Segurança
+  // Se "progresso.missoes" não existe OU estiver vazio...
   if (!progresso.missoes || progresso.missoes.length === 0) {
-    console.log("Restaurando missões...");
+    console.log("⚠️ Missões não encontradas no banco. Restaurando padrão...");
+    
+    // Força a lista padrão (que está escrita lá em cima no código)
     progresso.missoes = listaMissoes;
-    salvar(); // Salva de volta no servidor para fixar
-  } 
-  // Se já existem, mas faltam novas missões que você adicionou no código
-  else if (progresso.missoes.length < listaMissoes.length) {
-    console.log("Atualizando lista de missões...");
-    // Mantém o progresso das antigas e adiciona as novas
-    // (Lógica simplificada: reinicia lista mantendo progresso pelo ID seria ideal, 
-    // mas aqui vamos forçar a lista nova se a antiga estiver corrompida)
-    progresso.missoes = listaMissoes; 
+    
+    // Salva imediatamente no Firebase para corrigir o problema para sempre
     salvar();
   }
 
+  // 3. Atualiza a tela
   atualizarInterface();
 });
 
@@ -245,3 +244,4 @@ window.resetarDados = function() {
   }
 
 }
+
