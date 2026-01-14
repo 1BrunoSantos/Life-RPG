@@ -32,7 +32,6 @@ let progresso = JSON.parse(localStorage.getItem("lifeRPG")) || {
   missoes: JSON.parse(JSON.stringify(listaMissoesPadrao))
 };
 
-// Se faltar missões (ou usuário novo), carrega padrão
 if (!progresso.missoes || progresso.missoes.length === 0) {
     progresso.missoes = JSON.parse(JSON.stringify(listaMissoesPadrao));
 }
@@ -55,8 +54,22 @@ function abrirTab(tabId) {
 
 // ====== INTERFACE ======
 function calcularNivel() {
-    // 1000 XP = 1 Nível
     progresso.nivel = Math.floor(progresso.xpTotal / 1000) + 1;
+}
+
+// Função Auxiliar: Preenche os inputs se já tiver dados de hoje
+function carregarDadosHoje() {
+    const hoje = new Date().toLocaleDateString("pt-BR");
+    const registroHoje = progresso.historico.find(dia => dia.data === hoje);
+
+    if (registroHoje && registroHoje.detalhes) {
+        inputIds.forEach(id => {
+            const el = document.getElementById(id);
+            if (el && registroHoje.detalhes[id]) {
+                el.value = registroHoje.detalhes[id];
+            }
+        });
+    }
 }
 
 function atualizarInterface() {
@@ -76,8 +89,7 @@ function atualizarInterface() {
         progresso.historico.forEach((dia, index) => {
             let cor = dia.xp >= 0 ? "#4ade80" : "#f87171";
             let det = dia.detalhes || {};
-
-            let textoAcucar = det.acucar === "nao" ? "🚫 Zero" : "🍬 Comeu";
+            let textoAcucar = det.acucar === "nao" ? "🚫 Zero" : (det.acucar === "sim" ? "🍬 Comeu" : "-");
 
             html += `
             <div class="historico-item">
@@ -146,7 +158,7 @@ function renderizarMissoes() {
 
 function alterarProgresso(index, valor) {
     let missao = progresso.missoes[index];
-    missao.atual += (valor * 5); // Incremento 5%
+    missao.atual += (valor * 5);
     if (missao.atual < 0) missao.atual = 0;
     if (missao.atual > 100) missao.atual = 100;
     salvar();
@@ -157,11 +169,16 @@ function calcularXP() {
     msgErro.innerHTML = "";
     const hoje = new Date().toLocaleDateString("pt-BR");
     
-    if (progresso.historico.some(dia => dia.data === hoje)) {
-        msgErro.innerHTML = "⚠️ Você já calculou hoje!";
-        return;
+    // Verifica se já existe registro hoje para ATUALIZAR
+    const indexHoje = progresso.historico.findIndex(dia => dia.data === hoje);
+    let xpAnterior = 0;
+
+    if (indexHoje !== -1) {
+        // Se já existe, guarda o XP anterior para fazer a diferença
+        xpAnterior = progresso.historico[indexHoje].xp;
     }
 
+    // CAPTURA (Se estiver vazio, conta como string vazia)
     const vPressao = document.getElementById("pressao").value;
     const vGlicemia = document.getElementById("glicemia").value;
     const vAcucar = document.getElementById("acucar").value;
@@ -173,39 +190,36 @@ function calcularXP() {
     const vLeitura = document.getElementById("leitura").value;
     const vIdioma = document.getElementById("idioma").value;
 
-    for (let id of inputIds) {
-        if (!document.getElementById(id).value) {
-            msgErro.innerHTML = "⚠️ Preencha todos os campos!";
-            return;
-        }
-    }
-
+    // Removemos a validação "Preencha tudo". Agora calcula com o que tem.
+    
     let xp = 0;
     
-    // === CÁLCULO DE PONTUAÇÃO (TODOS TEM PENALIDADE SE NÃO ATINGIR) ===
+    // === CÁLCULO (Vazio ou 0 = Penalidade) ===
 
     // Pressão
     const pressao = Number(vPressao);
-    if (pressao === 11) xp += 5; 
-    else if (pressao === 12) xp += 3; 
-    else if (pressao === 13) xp += 2; 
-    else if (pressao >= 14) xp -= 5;
-    
+    if (vPressao !== "" && pressao === 11) xp += 5; 
+    else if (vPressao !== "" && pressao === 12) xp += 3; 
+    else if (vPressao !== "" && pressao === 13) xp += 2; 
+    else if (vPressao !== "" && pressao >= 14) xp -= 5;
+    else if (vPressao === "") xp -= 5; // Vazio = Penalidade (ainda não mediu)
+    else xp -= 5; // Valores ruins genéricos
+
     // Glicemia
     const glicemia = Number(vGlicemia);
-    if (glicemia < 99) xp += 5; 
-    else if (glicemia <= 110) xp += 3; 
-    else if (glicemia > 120) xp -= 5;
+    if (vGlicemia !== "" && glicemia < 99) xp += 5; 
+    else if (vGlicemia !== "" && glicemia <= 110) xp += 3; 
+    else xp -= 5; // Vazio ou Alta
     
     // Açúcar
     if (vAcucar === "nao") xp += 5; 
-    else xp -= 5;
+    else xp -= 5; // Sim ou Vazio
     
     // Sono
     const sono = Number(vSono);
     if (sono >= 7) xp += 5; 
     else if (sono >= 5) xp += 3; 
-    else xp -= 5; // < 5h
+    else xp -= 5; // <5 ou vazio
 
     // Treino
     xp += vTreino === "sim" ? 5 : -5;
@@ -214,28 +228,28 @@ function calcularXP() {
     const cardio = Number(vCardio);
     if (cardio >= 60) xp += 5; 
     else if (cardio >= 30) xp += 3; 
-    else xp -= 5; // < 30 min
+    else xp -= 5;
     
-    // Estudos/Mente
+    // Mente (Tudo -5 se não atingir)
     const estudo = Number(vEstudo);
     if (estudo >= 60) xp += 5; 
     else if (estudo >= 30) xp += 3; 
-    else xp -= 5; // < 30 min
+    else xp -= 5; 
     
     const exercicios = Number(vExercicios);
     if (exercicios >= 10) xp += 5; 
     else if (exercicios >= 5) xp += 3; 
-    else xp -= 5; // < 5 contas
+    else xp -= 5; 
     
     const leitura = Number(vLeitura);
     if (leitura >= 30) xp += 5; 
     else if (leitura >= 15) xp += 3; 
-    else xp -= 5; // < 15 min
+    else xp -= 5; 
     
     const idioma = Number(vIdioma);
     if (idioma >= 60) xp += 5; 
     else if (idioma >= 30) xp += 3; 
-    else xp -= 5; // < 30 min
+    else xp -= 5; 
 
     // Status
     let status = "NORMAL";
@@ -243,9 +257,10 @@ function calcularXP() {
     else if (xp >= 30) status = "BOM 🚀"; 
     else if (xp < 10) status = "CRÍTICO 💀";
 
-    progresso.xpTotal += xp;
+    // ATUALIZAÇÃO DO TOTAL (Remove o anterior do dia e soma o novo)
+    progresso.xpTotal = progresso.xpTotal - xpAnterior + xp;
     
-    progresso.historico.unshift({
+    const dadosDia = {
         data: hoje,
         xp: xp,
         status: status,
@@ -261,13 +276,20 @@ function calcularXP() {
             leitura: vLeitura,
             idioma: vIdioma
         }
-    });
-    
-    if (progresso.historico.length > 30) progresso.historico.pop();
+    };
+
+    if (indexHoje !== -1) {
+        // Atualiza o dia existente
+        progresso.historico[indexHoje] = dadosDia;
+    } else {
+        // Cria novo dia
+        progresso.historico.unshift(dadosDia);
+        if (progresso.historico.length > 30) progresso.historico.pop();
+    }
 
     const divResultado = document.getElementById("resultado");
     divResultado.style.display = "block";
-    divResultado.innerHTML = `<h2>RESULTADO</h2><span>${xp} XP</span><br>${status}`;
+    divResultado.innerHTML = `<h2>ATUALIZADO</h2><span>${xp} XP</span><br>${status}`;
     
     salvar();
 }
@@ -308,4 +330,6 @@ function importarDados() {
     }
 }
 
+// Inicialização
+carregarDadosHoje(); // Preenche inputs se já tiver dados
 atualizarInterface();
