@@ -1,4 +1,4 @@
-// ====== LISTA PADRONIZADA ======
+// ====== LISTA PADRONIZADA (Edite aqui para adicionar missões) ======
 const listaMissoesPadrao = [
   { id: 1, cat: "Carreira & Estudos", titulo: "Concluir Pós-Graduação", atual: 0, meta: 100, unidade: "%" },
   { id: 2, cat: "Carreira & Estudos", titulo: "Estudar para Enem", atual: 0, meta: 100, unidade: "%" },
@@ -20,6 +20,8 @@ const listaMissoesPadrao = [
   { id: 18, cat: "Financeiro & Bens", titulo: "Comprar Casa Própria", atual: 0, meta: 100, unidade: "%" },
   { id: 19, cat: "Financeiro & Bens", titulo: "Comprar Moto", atual: 0, meta: 100, unidade: "%" },
   { id: 20, cat: "Financeiro & Bens", titulo: "Comprar Carro Automático", atual: 0, meta: 100, unidade: "%" },
+  // Exemplo de nova missão (use ID único):
+  // { id: 21, cat: "Viagens", titulo: "Ir para a Disney", atual: 0, meta: 100, unidade: "%" },
 ];
 
 const inputIds = ["pressao_sis", "pressao_dia", "glicemia", "acucar", "sono", "treino", "cardio", "estudo", "exercicios", "leitura", "idioma"];
@@ -32,9 +34,20 @@ let progresso = JSON.parse(localStorage.getItem("lifeRPG")) || {
   missoes: JSON.parse(JSON.stringify(listaMissoesPadrao))
 };
 
-if (!progresso.missoes || progresso.missoes.length === 0) {
+// === SINCRONIZAÇÃO INTELIGENTE ===
+// Adiciona missões novas do código sem apagar o progresso das antigas
+if (progresso.missoes) {
+    listaMissoesPadrao.forEach(padrao => {
+        const existe = progresso.missoes.find(m => m.id === padrao.id);
+        if (!existe) {
+            progresso.missoes.push(JSON.parse(JSON.stringify(padrao)));
+        }
+    });
+    localStorage.setItem("lifeRPG", JSON.stringify(progresso));
+} else {
     progresso.missoes = JSON.parse(JSON.stringify(listaMissoesPadrao));
 }
+// ==================================
 
 function salvar() {
     localStorage.setItem("lifeRPG", JSON.stringify(progresso));
@@ -72,6 +85,7 @@ function verificarDiasPerdidos() {
     
     let diasPenalizados = 0;
 
+    // Loop para preencher os buracos entre as datas
     for (let i = 1; i < diffDias; i++) {
         let diaPerdido = new Date(dataHoje);
         diaPerdido.setDate(dataHoje.getDate() - i); 
@@ -114,7 +128,6 @@ setInterval(() => {
     verificarDiasPerdidos();
     carregarDadosHoje();
 }, 60000);
-
 
 // ====== INTERFACE ======
 function calcularNivel() {
@@ -225,31 +238,26 @@ function renderizarMissoes() {
     container.innerHTML = html;
 }
 
-// === NOVA LÓGICA DE BÔNUS DE MISSÃO ===
+// === LÓGICA DE BÔNUS DE MISSÃO (1000 XP) ===
 function alterarProgresso(index, valor) {
     let missao = progresso.missoes[index];
-    
-    // Verifica se já estava completa ANTES da alteração
     const estavaCompleta = missao.atual >= 100;
 
-    missao.atual += (valor * 5);
-    
-    // Limites
+    missao.atual += (valor * 5); // Incremento 5%
     if (missao.atual < 0) missao.atual = 0;
     if (missao.atual > 100) missao.atual = 100;
 
-    // LÓGICA DE RECOMPENSA (1000 XP)
+    // Se completou agora (0 -> 100)
     if (!estavaCompleta && missao.atual === 100) {
         const bonus = 1000;
         progresso.xpTotal += bonus;
         alert(`🎉 PARABÉNS! Missão "${missao.titulo}" Concluída!\n\nVocê ganhou +${bonus} XP e subiu de nível! 🚀`);
     }
 
-    // LÓGICA ANTI-CHEAT (Se desmarcar, perde o XP)
+    // Se desmarcou (100 -> 95)
     if (estavaCompleta && missao.atual < 100) {
         const penalty = 1000;
         progresso.xpTotal -= penalty;
-        // Evita XP negativo total
         if(progresso.xpTotal < 0) progresso.xpTotal = 0; 
     }
 
@@ -280,17 +288,17 @@ function calcularXP() {
 
     let xp = 0;
     
-    // === CÁLCULO ===
+    // === CÁLCULO (Vazio "" = -5 XP) ===
     
-    // Pressão
+    // Pressão (Baseada na Sistólica)
     let sistolica = Number(vPressaoSis);
-    if (sistolica > 50) sistolica = Math.floor(sistolica / 10);
+    if (sistolica > 50) sistolica = Math.floor(sistolica / 10); // Converte 120 -> 12
 
     if (vPressaoSis !== "" && sistolica === 11) xp += 5; 
     else if (vPressaoSis !== "" && sistolica === 12) xp += 3; 
     else if (vPressaoSis !== "" && sistolica === 13) xp += 2; 
     else if (vPressaoSis !== "" && sistolica >= 14) xp -= 5;
-    else xp -= 5; 
+    else xp -= 5; // Vazio ou <11
 
     // Glicemia
     const glicemia = Number(vGlicemia);
@@ -317,7 +325,7 @@ function calcularXP() {
     else if (vCardio !== "" && cardio >= 30) xp += 3; 
     else xp -= 5;
     
-    // Mente
+    // Mente (Tudo -5 se não atingir)
     const estudo = Number(vEstudo);
     if (vEstudo !== "" && estudo >= 60) xp += 5; 
     else if (vEstudo !== "" && estudo >= 30) xp += 3; 
@@ -415,6 +423,7 @@ function importarDados() {
     }
 }
 
+// Inicia
 verificarDiasPerdidos();
 carregarDadosHoje();
 atualizarInterface();
