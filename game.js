@@ -241,3 +241,21 @@ window.resetarDados = function() {
     location.reload();
   }
 }
+window.forcarResetMissoes = function() {
+    if(confirm("Isto vai reescrever todas as missões. Continuar?")) {
+        console.log("A forçar envio de missões...");
+        
+        // Define a lista localmente
+        progresso.missoes = listaMissoes;
+        
+        // Envia para o Firebase (Força Bruta)
+        set(dbRef, progresso)
+            .then(() => {
+                alert("Sucesso! As missões foram enviadas. A página vai recarregar.");
+                location.reload();
+            })
+            .catch((erro) => {
+                alert("Erro ao enviar: " + erro);
+            });
+    }
+}
