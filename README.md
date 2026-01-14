@@ -1,70 +1,59 @@
-# 🎮 Life RPG - Bruno Alex
+# 📱 Life RPG - Bruno Alex
 
-> "A constância vence a intensidade. 1 Mês = 1 Nível."
+> "A constância vence a intensidade. Transforme sua rotina em um jogo."
 
-Este é um sistema de gamificação da vida pessoal, focado em Saúde, Engenharia e Independência Financeira. O projeto é **100% Offline**, rodando direto no navegador e salvando os dados no dispositivo.
+Este é um **Web App (PWA) 100% Offline**. Você pode instalá-lo no seu celular e ele funciona sem internet, salvando seu progresso localmente.
 
-![Status](https://img.shields.io/badge/Status-Operacional-brightgreen)
-![Plataforma](https://img.shields.io/badge/Plataforma-Mobile%20%7C%20Web-blue)
+![Status](https://img.shields.io/badge/Status-Online-brightgreen)
+![App](https://img.shields.io/badge/Tipo-PWA%20Instalável-blue)
 
-## 🔗 JOGAR AGORA
-Acesse pelo celular:
+## 🔗 JOGUE AGORA
+Acesse e instale:
 ### 👉 [https://1brunosantos.github.io/Life-RPG/](https://1brunosantos.github.io/Life-RPG/)
 
 ---
 
-## 📐 A Matemática do Jogo
+## ⚔️ A Matemática do Jogo
 
-O sistema foi calibrado para que a **constância mínima** garanta a evolução.
+O objetivo é subir de nível através da disciplina diária.
 
-* **Meta de Nível:** 1.000 XP.
-* **Duração do Nível:** 1 Mês (30 dias).
-* **Meta Diária:** **34 XP**.
+* **Meta de Nível:** 1.000 XP (1 Mês de constância).
+* **Meta Diária:** ~35 XP.
+* **Mecânica:** Preencha os dados ao longo do dia. O cálculo atualiza seu saldo em tempo real.
 
-Se você fizer o **mínimo aceitável** em todas as tarefas, você ganha **34 XP/dia** (1.020 XP/mês) e sobe de nível.
-*Se falhar em hábitos críticos (Açúcar ou Academia), você perde pontos e atrasa sua evolução.*
+### 💀 Sistema de Penalidades (Hardcore)
+
+O jogo não aceita "dias em branco".
+1.  **Punição por Campo Vazio (-5 XP):** Se calcular o dia deixando campos em branco ou não atingir o mínimo (ex: ler menos de 15min), você perde 5 pontos naquele atributo.
+2.  **A Lei da Meia-Noite (-50 XP):** Se virar o dia (00:00) e você não tiver preenchido o dia anterior, o sistema detecta a falha e aplica uma **multa automática de -50 XP** por dia perdido.
 
 ---
 
-## 📜 Regras de Pontuação (XP)
+## 📊 Critérios de Pontuação
 
-| Categoria | Elite (+5 XP) | Mínimo (+3 XP) | Crítico (-5 XP) |
+| Categoria | Elite (+5 XP) | Mínimo (+3 XP) | Penalidade (-5 XP) |
 | :--- | :--- | :--- | :--- |
-| **🩺 Pressão** | 11/x | 12/x | ≥14/x |
-| **🩸 Glicemia** | <99 | 99-110 | >120 |
-| **🍬 Açúcar** | **Zero** (+5 XP) | *N/A* | **Comeu** (-5 XP) |
-| **😴 Sono** | 7h+ | 5h - 6h | <5h |
-| **🏋️ Treino** | **Foi** (+5 XP) | *N/A* | **Faltou** (-5 XP) |
-| **🏃 Cardio** | 60 min | 30 min | <30 min |
-| **🧠 Estudo** | 60 min | 30 min | *N/A* |
-| **📐 Exercícios** | 10 contas | 5 contas | *N/A* |
-| **📚 Leitura** | 30 min | 15 min | *N/A* |
-| **🗣️ Idioma** | 60 min | 30 min | *N/A* |
-
-> **Nota:** Pressão 13 gera uma pontuação de sobrevivência (+2 XP).
+| **Pressão** | 11/7 (Ideal) | 12/8 (Ok) | ≥14 ou Vazio |
+| **Glicemia** | <99 | 99-110 | >120 ou Vazio |
+| **Açúcar** | **Zero** | *N/A* | Comeu |
+| **Treino** | **Foi** | *N/A* | Faltou |
+| **Estudos** | 60 min | 30 min | <30 min |
+| **Sono** | 7h+ | 5h-6h | <5h |
 
 ---
 
-## 🎯 Sistema de Missões
+## 📲 Como Instalar (Android/iOS)
 
-As missões são objetivos de longo prazo (ex: "Juntar 1 Milhão", "Inglês C2").
-* **Barra de Progresso:** Todas as missões vão de **0% a 100%**.
-* **Incremento:** Cada clique no botão `+` adiciona **5%** de progresso.
-* **Adicionar Missões:** Novas missões são inseridas diretamente no código `game.js` para manter o foco e evitar edições acidentais.
-
----
-
-## 💾 Backup e Dados
-
-O jogo usa o **LocalStorage** do navegador.
-* **Privacidade:** Nenhum dado sai do seu celular.
-* **Backup:** Na aba "Diário", use os botões **Copiar/Colar** para salvar seu progresso em um bloco de notas ou transferir para outro celular.
-* **Histórico:** O sistema grava o valor exato de cada medição (ex: "Glicemia: 98") para consulta futura.
+1.  Acesse o link pelo navegador (Chrome/Safari).
+2.  Abra o menu (três pontinhos ou compartilhar).
+3.  Selecione **"Adicionar à Tela Inicial"** ou **"Instalar Aplicativo"**.
+4.  Pronto! O Life RPG agora roda em tela cheia e offline como um app nativo.
 
 ---
 
 ### 🛠️ Tecnologias
-* HTML5, CSS3, JavaScript Puro.
-* Design Mobile First (Focado em celulares).
+* HTML5, CSS3, JavaScript.
+* PWA (Service Workers + Manifest).
+* LocalStorage (Banco de dados no próprio dispositivo).
 
 Developed by **Bruno Alex**
