@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Life RPG - Bruno Alex</title>
+  <title>Life RPG - Bruno Alex </title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -24,18 +24,26 @@
     </div>
 
     <div id="tab-status" class="tab-content active">
-        <p class="subtitle">Check-in Diário</p>
+        <p class="subtitle">Meta Diária: ~35 XP</p>
 
         <div class="panel">
             <h2>🩺 Saúde</h2>
+            
             <input type="number" id="pressao" placeholder="Pressão (Ex: 12)">
-            <div class="regras">🎯 11 (50xp) | 12 (30xp) | 13 (10xp) | ≥14 (-30xp)</div>
+            <div class="regras">🎯 12 (3xp) | 11 (5xp) | 13 (2xp) | ≥14 (-5xp)</div>
 
             <input type="number" id="glicemia" placeholder="Glicemia (Ex: 98)">
-            <div class="regras">🎯 &lt;99 (50xp) | 99-149 (30xp) | 150 (10xp) | &gt;150 (-30xp)</div>
+            <div class="regras">🎯 99-110 (3xp) | &lt;99 (5xp) | &gt;120 (-5xp)</div>
+
+            <select id="acucar">
+                <option value="" disabled selected>Comeu Açúcar / Doce?</option>
+                <option value="nao">Não (Zero Açúcar)</option>
+                <option value="sim">Sim (Comi)</option>
+            </select>
+            <div class="regras">🎯 Não (5xp) | Sim (-5xp)</div>
 
             <input type="number" id="sono" placeholder="Sono (horas)">
-            <div class="regras">🎯 5h-7h (50xp) | &gt;7h (100xp) | Outros (-30xp)</div>
+            <div class="regras">🎯 5h (3xp) | 7h+ (5xp) | &lt;5h (-5xp)</div>
         </div>
 
         <div class="panel">
@@ -45,25 +53,25 @@
                 <option value="sim">Academia: Sim</option>
                 <option value="nao">Academia: Não</option>
             </select>
-            <div class="regras">🎯 Sim (50xp) | Não (-30xp)</div>
+            <div class="regras">🎯 Sim (5xp) | Não (-5xp)</div>
 
             <input type="number" id="cardio" placeholder="Cardio (min)">
-            <div class="regras">🎯 30-59min (50xp) | ≥60min (100xp) | &lt;30 (-30xp)</div>
+            <div class="regras">🎯 30min (3xp) | 60min (5xp) | &lt;30 (-5xp)</div>
         </div>
 
         <div class="panel">
             <h2>🧠 Mente</h2>
             <input type="number" id="estudo" placeholder="Estudo (min)">
-            <div class="regras">🎯 30-60min (50xp) | &gt;60min (100xp) | &lt;30 (-30xp)</div>
+            <div class="regras">🎯 30min (3xp) | 60min (5xp)</div>
 
             <input type="number" id="exercicios" placeholder="Exercícios (qntd)">
-            <div class="regras">🎯 5-10 contas (50xp) | &gt;10 (100xp) | &lt;5 (-30xp)</div>
+            <div class="regras">🎯 5 contas (3xp) | 10 contas (5xp)</div>
 
             <input type="number" id="leitura" placeholder="Leitura (min)">
-            <div class="regras">🎯 15-30min (50xp) | &gt;30min (100xp) | &lt;15 (-30xp)</div>
+            <div class="regras">🎯 15min (3xp) | 30min (5xp)</div>
 
             <input type="number" id="idioma" placeholder="Idioma (min)">
-            <div class="regras">🎯 30-60min (50xp) | &gt;60min (100xp) | &lt;30 (-30xp)</div>
+            <div class="regras">🎯 30min (3xp) | 60min (5xp)</div>
         </div>
 
         <button onclick="calcularXP()" class="btn-action">CALCULAR XP DO DIA</button>
@@ -72,22 +80,9 @@
     </div>
 
     <div id="tab-missoes" class="tab-content">
-        <p class="subtitle">Quest Log (Progresso 0-100%)</p>
+        <p class="subtitle">Quest Log (0-100%)</p>
         <div id="container-missoes"></div>
-
-        <div class="panel-nova-missao">
-            <h3>➕ Criar Nova Missão</h3>
-            <div style="display: flex; gap: 5px; margin-bottom: 5px;">
-                <input type="text" id="nova-cat" placeholder="Categoria (Ex: Viagens)">
-            </div>
-            <div style="display: flex; gap: 5px;">
-                <input type="text" id="nova-titulo" placeholder="Título (Ex: Ir para o Chile)">
-            </div>
-            <p style="font-size: 11px; color: #94a3b8; text-align: center; margin-top: 5px;">
-                *Todas as missões são criadas de 0 a 100%
-            </p>
-            <button onclick="adicionarMissao()" class="btn-small" style="width:100%; margin-top:5px; background: #0ea5e9;">CRIAR</button>
-        </div>
+      
     </div>
 
     <div id="tab-diario" class="tab-content">
