@@ -74,19 +74,29 @@
     <div id="tab-missoes" class="tab-content">
         <p class="subtitle">Quest Log (Progresso)</p>
         <div id="container-missoes"></div>
+
+        <div class="panel-nova-missao">
+            <h3>➕ Criar Nova Missão</h3>
+            <input type="text" id="nova-cat" placeholder="Categoria (Ex: Financeiro)">
+            <input type="text" id="nova-titulo" placeholder="Título (Ex: Juntar 5k)">
+            <div style="display: flex; gap: 5px;">
+                <input type="number" id="nova-meta" placeholder="Meta (Ex: 5000)">
+                <input type="text" id="nova-unidade" placeholder="Unid (Ex: R$)">
+            </div>
+            <button onclick="adicionarMissao()" class="btn-small" style="width:100%; margin-top:5px;">CRIAR</button>
+        </div>
     </div>
 
     <div id="tab-diario" class="tab-content">
         <div class="historico-container">
-            <h3>📜 Registro de Batalha</h3>
+            <h3>📜 Registro Detalhado</h3>
             <div id="lista-historico"></div>
         </div>
         
         <div class="panel" style="margin-top: 30px; border-color: #f59e0b;">
             <h2 style="color: #f59e0b;">💾 Backup de Dados</h2>
-            <p style="font-size: 12px; color: #ccc;">Use isso para trocar de celular.</p>
-            <button onclick="exportarDados()" style="background: #334155; margin-bottom: 10px;">📤 COPIAR DADOS (EXPORTAR)</button>
-            <button onclick="importarDados()" style="background: #334155;">📥 COLAR DADOS (IMPORTAR)</button>
+            <button onclick="exportarDados()" style="background: #334155; margin-bottom: 10px; width: 100%;">📤 COPIAR DADOS</button>
+            <button onclick="importarDados()" style="background: #334155; width: 100%;">📥 COLAR DADOS</button>
         </div>
 
         <button onclick="resetarDados()" class="btn-reset">🗑️ APAGAR TUDO (RESET)</button>
