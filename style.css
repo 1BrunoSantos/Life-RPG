@@ -47,21 +47,21 @@ input, select { width: 100%; margin-bottom: 5px; padding: 12px; border-radius: 8
 .botoes-progresso { display: flex; justify-content: flex-end; gap: 15px; margin-top: 10px; }
 
 /* Nova Missão Form */
-.panel-nova-missao { background: #334155; padding: 15px; border-radius: 10px; margin-top: 30px; border: 1px dashed #94a3b8; }
-.panel-nova-missao h3 { margin-top: 0; color: #fff; font-size: 16px; text-align: center; }
+.panel-nova-missao { background: #1e293b; padding: 15px; border-radius: 10px; margin-top: 30px; border: 1px dashed #475569; }
+.panel-nova-missao h3 { margin-top: 0; color: #e2e8f0; font-size: 18px; text-align: center; }
 
 /* === HISTÓRICO DETALHADO === */
 .historico-item { border-bottom: 1px solid #334155; padding: 15px 0; }
 .historico-cabecalho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
 .historico-detalhes { 
     display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    gap: 5px; 
-    font-size: 12px; 
-    color: #94a3b8; 
-    background: rgba(0,0,0,0.3); 
-    padding: 8px; 
-    border-radius: 6px; 
+    grid-template-columns: 1fr 1fr; /* Duas colunas */
+    gap: 8px; 
+    font-size: 13px; 
+    color: #cbd5e1; 
+    background: rgba(15, 23, 42, 0.6); 
+    padding: 10px; 
+    border-radius: 8px; 
 }
 .btn-lixeira { background: transparent; border: none; font-size: 20px; padding: 5px; color: #ef4444; }
 
