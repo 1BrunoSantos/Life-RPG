@@ -32,7 +32,7 @@ let progresso = JSON.parse(localStorage.getItem("lifeRPG")) || {
   missoes: JSON.parse(JSON.stringify(listaMissoesPadrao))
 };
 
-// Se faltar missões, carrega padrão
+// Se faltar missões (ou usuário novo), carrega padrão
 if (!progresso.missoes || progresso.missoes.length === 0) {
     progresso.missoes = JSON.parse(JSON.stringify(listaMissoesPadrao));
 }
@@ -55,6 +55,7 @@ function abrirTab(tabId) {
 
 // ====== INTERFACE ======
 function calcularNivel() {
+    // 1000 XP = 1 Nível
     progresso.nivel = Math.floor(progresso.xpTotal / 1000) + 1;
 }
 
@@ -181,7 +182,7 @@ function calcularXP() {
 
     let xp = 0;
     
-    // === CÁLCULO DE PONTUAÇÃO (COM PENALIDADES) ===
+    // === CÁLCULO DE PONTUAÇÃO (TODOS TEM PENALIDADE SE NÃO ATINGIR) ===
 
     // Pressão
     const pressao = Number(vPressao);
@@ -204,7 +205,7 @@ function calcularXP() {
     const sono = Number(vSono);
     if (sono >= 7) xp += 5; 
     else if (sono >= 5) xp += 3; 
-    else xp -= 5;
+    else xp -= 5; // < 5h
 
     // Treino
     xp += vTreino === "sim" ? 5 : -5;
@@ -213,9 +214,9 @@ function calcularXP() {
     const cardio = Number(vCardio);
     if (cardio >= 60) xp += 5; 
     else if (cardio >= 30) xp += 3; 
-    else xp -= 5;
+    else xp -= 5; // < 30 min
     
-    // Estudos/Mente (COM PENALIDADES DE -5 SE NÃO ATINGIR O MÍNIMO)
+    // Estudos/Mente
     const estudo = Number(vEstudo);
     if (estudo >= 60) xp += 5; 
     else if (estudo >= 30) xp += 3; 
