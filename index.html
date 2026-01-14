@@ -72,18 +72,21 @@
     </div>
 
     <div id="tab-missoes" class="tab-content">
-        <p class="subtitle">Quest Log (Progresso)</p>
+        <p class="subtitle">Quest Log (Progresso 0-100%)</p>
         <div id="container-missoes"></div>
 
         <div class="panel-nova-missao">
             <h3>➕ Criar Nova Missão</h3>
-            <input type="text" id="nova-cat" placeholder="Categoria (Ex: Financeiro)">
-            <input type="text" id="nova-titulo" placeholder="Título (Ex: Juntar 5k)">
-            <div style="display: flex; gap: 5px;">
-                <input type="number" id="nova-meta" placeholder="Meta (Ex: 5000)">
-                <input type="text" id="nova-unidade" placeholder="Unid (Ex: R$)">
+            <div style="display: flex; gap: 5px; margin-bottom: 5px;">
+                <input type="text" id="nova-cat" placeholder="Categoria (Ex: Viagens)">
             </div>
-            <button onclick="adicionarMissao()" class="btn-small" style="width:100%; margin-top:5px;">CRIAR</button>
+            <div style="display: flex; gap: 5px;">
+                <input type="text" id="nova-titulo" placeholder="Título (Ex: Ir para o Chile)">
+            </div>
+            <p style="font-size: 11px; color: #94a3b8; text-align: center; margin-top: 5px;">
+                *Todas as missões são criadas de 0 a 100%
+            </p>
+            <button onclick="adicionarMissao()" class="btn-small" style="width:100%; margin-top:5px; background: #0ea5e9;">CRIAR</button>
         </div>
     </div>
 
@@ -95,8 +98,10 @@
         
         <div class="panel" style="margin-top: 30px; border-color: #f59e0b;">
             <h2 style="color: #f59e0b;">💾 Backup de Dados</h2>
-            <button onclick="exportarDados()" style="background: #334155; margin-bottom: 10px; width: 100%;">📤 COPIAR DADOS</button>
-            <button onclick="importarDados()" style="background: #334155; width: 100%;">📥 COLAR DADOS</button>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="exportarDados()" style="background: #334155; width: 50%;">📤 COPIAR</button>
+                <button onclick="importarDados()" style="background: #334155; width: 50%;">📥 COLAR</button>
+            </div>
         </div>
 
         <button onclick="resetarDados()" class="btn-reset">🗑️ APAGAR TUDO (RESET)</button>
