@@ -1,5 +1,5 @@
 // Mudei o nome aqui para "v2" para forçar a atualização
-const CACHE_NAME = "liferpg-bruno-v3"; 
+const CACHE_NAME = "liferpg-bruno-v4"; 
 
 const ASSETS = [
   "./",
