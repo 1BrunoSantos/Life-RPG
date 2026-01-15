@@ -1,4 +1,4 @@
-// ====== LISTA PADRONIZADA (Edite aqui para adicionar missões) ======
+// ====== LISTA PADRONIZADA ======
 const listaMissoesPadrao = [
   { id: 1, cat: "Carreira & Estudos", titulo: "Concluir Pós-Graduação", atual: 0, meta: 100, unidade: "%" },
   { id: 2, cat: "Carreira & Estudos", titulo: "Estudar para Enem", atual: 0, meta: 100, unidade: "%" },
@@ -20,12 +20,14 @@ const listaMissoesPadrao = [
   { id: 18, cat: "Financeiro & Bens", titulo: "Comprar Casa Própria", atual: 0, meta: 100, unidade: "%" },
   { id: 19, cat: "Financeiro & Bens", titulo: "Comprar Moto", atual: 0, meta: 100, unidade: "%" },
   { id: 20, cat: "Financeiro & Bens", titulo: "Comprar Carro Automático", atual: 0, meta: 100, unidade: "%" },
- { id: 21, cat: "Financeiro & Bens", titulo: "Me casar", atual: 0, meta: 100, unidade: "%" },
-  // Exemplo de nova missão (use ID único):
-  // { id: 21, cat: "Viagens", titulo: "Ir para a Disney", atual: 0, meta: 100, unidade: "%" },
+{ id: 21, cat: "Financeiro & Bens", titulo: "Me casar", atual: 0, meta: 100, unidade: "%" },
+  // MISSÕES NOVAS/ATUALIZADAS (IDs Novos para forçar atualização)
+  { id: 22, cat: "Saúde & Físico", titulo: "30 Dias Zero Açúcar (Hardcore)", atual: 0, meta: 30, unidade: "dias" },
+  { id: 24, cat: "Saúde & Físico", titulo: "Musculação 5x/semana (3 meses)", atual: 0, meta: 32, unidade: "treinos" },
+  { id: 26, cat: "Saúde & Físico", titulo: "Baixar Glicada para 5%", atual: 0, meta: 100, unidade: "%" },
 ];
 
-const inputIds = ["pressao_sis", "pressao_dia", "glicemia", "acucar", "sono", "treino", "cardio", "estudo", "exercicios", "leitura", "idioma"];
+const inputIds = ["pressao_sis", "pressao_dia", "glicemia", "acucar", "agua", "sono", "treino", "cardio", "estudo", "exercicios", "leitura", "idioma"];
 
 // ====== INICIALIZAÇÃO ======
 let progresso = JSON.parse(localStorage.getItem("lifeRPG")) || {
@@ -36,19 +38,21 @@ let progresso = JSON.parse(localStorage.getItem("lifeRPG")) || {
 };
 
 // === SINCRONIZAÇÃO INTELIGENTE ===
-// Adiciona missões novas do código sem apagar o progresso das antigas
 if (progresso.missoes) {
     listaMissoesPadrao.forEach(padrao => {
         const existe = progresso.missoes.find(m => m.id === padrao.id);
         if (!existe) {
             progresso.missoes.push(JSON.parse(JSON.stringify(padrao)));
+        } else {
+            // Atualiza título se mudou (para refletir a mudança de 21 para 30 dias)
+            existe.titulo = padrao.titulo;
+            existe.meta = padrao.meta;
         }
     });
     localStorage.setItem("lifeRPG", JSON.stringify(progresso));
 } else {
     progresso.missoes = JSON.parse(JSON.stringify(listaMissoesPadrao));
 }
-// ==================================
 
 function salvar() {
     localStorage.setItem("lifeRPG", JSON.stringify(progresso));
@@ -86,7 +90,6 @@ function verificarDiasPerdidos() {
     
     let diasPenalizados = 0;
 
-    // Loop para preencher os buracos entre as datas
     for (let i = 1; i < diffDias; i++) {
         let diaPerdido = new Date(dataHoje);
         diaPerdido.setDate(dataHoje.getDate() - i); 
@@ -104,6 +107,7 @@ function verificarDiasPerdidos() {
                     pressao_dia: "N/A",
                     glicemia: "N/A",
                     acucar: "N/A",
+                    agua: "N/A",
                     sono: "N/A",
                     treino: "N/A",
                     cardio: "N/A",
@@ -171,7 +175,9 @@ function atualizarInterface() {
         progresso.historico.forEach((dia, index) => {
             let cor = dia.xp >= 0 ? "#4ade80" : "#f87171";
             let det = dia.detalhes || {};
+            
             let textoAcucar = det.acucar === "nao" ? "🚫 Zero" : (det.acucar === "sim" ? "🍬 Comeu" : "-");
+            let textoAgua = det.agua === "sim" ? "💧 2L+" : (det.agua === "nao" ? "❌ <2L" : "-");
             let textoPressao = (det.pressao_sis && det.pressao_dia) ? `${det.pressao_sis}/${det.pressao_dia}` : (det.pressao_sis || '-');
 
             html += `
@@ -186,6 +192,7 @@ function atualizarInterface() {
                     <span>🩺 Pressão: <b style="color:#fff">${textoPressao}</b></span>
                     <span>🩸 Glicemia: <b style="color:#fff">${det.glicemia || '-'}</b></span>
                     <span>🚫 Açúcar: <b style="color:#fff">${textoAcucar}</b></span>
+                    <span>💧 Água: <b style="color:#fff">${textoAgua}</b></span>
                     <span>😴 Sono: <b style="color:#fff">${det.sono || '-'}h</b></span>
                     <span>🏋️ Treino: <b style="color:#fff">${det.treino || '-'}</b></span>
                     <span>🏃 Cardio: <b style="color:#fff">${det.cardio || '-'}min</b></span>
@@ -224,7 +231,7 @@ function renderizarMissoes() {
         <div class="missao-card">
             <div class="missao-header">
                 <span>${missao.titulo}</span>
-                <span>${missao.atual}%</span>
+                <span>${missao.atual}% / ${missao.meta} ${missao.unidade || ''}</span>
             </div>
             <div class="barra-fundo">
                 <div class="barra-progresso" style="width: ${porcentagem}%"></div>
@@ -243,8 +250,10 @@ function renderizarMissoes() {
 function alterarProgresso(index, valor) {
     let missao = progresso.missoes[index];
     const estavaCompleta = missao.atual >= 100;
-
-    missao.atual += (valor * 5); // Incremento 5%
+    
+    // Incremento de 5% (pode ajustar se quiser passos menores)
+    missao.atual += (valor * 5); 
+    
     if (missao.atual < 0) missao.atual = 0;
     if (missao.atual > 100) missao.atual = 100;
 
@@ -279,6 +288,7 @@ function calcularXP() {
     const vPressaoDia = document.getElementById("pressao_dia").value;
     const vGlicemia = document.getElementById("glicemia").value;
     const vAcucar = document.getElementById("acucar").value;
+    const vAgua = document.getElementById("agua").value; // NOVO
     const vSono = document.getElementById("sono").value;
     const vTreino = document.getElementById("treino").value;
     const vCardio = document.getElementById("cardio").value;
@@ -289,17 +299,17 @@ function calcularXP() {
 
     let xp = 0;
     
-    // === CÁLCULO (Vazio "" = -5 XP) ===
+    // === CÁLCULO ===
     
-    // Pressão (Baseada na Sistólica)
+    // Pressão
     let sistolica = Number(vPressaoSis);
-    if (sistolica > 50) sistolica = Math.floor(sistolica / 10); // Converte 120 -> 12
+    if (sistolica > 50) sistolica = Math.floor(sistolica / 10);
 
     if (vPressaoSis !== "" && sistolica === 11) xp += 5; 
     else if (vPressaoSis !== "" && sistolica === 12) xp += 3; 
     else if (vPressaoSis !== "" && sistolica === 13) xp += 2; 
     else if (vPressaoSis !== "" && sistolica >= 14) xp -= 5;
-    else xp -= 5; // Vazio ou <11
+    else xp -= 5; 
 
     // Glicemia
     const glicemia = Number(vGlicemia);
@@ -309,6 +319,10 @@ function calcularXP() {
     
     // Açúcar
     if (vAcucar === "nao") xp += 5; 
+    else xp -= 5;
+
+    // Água (NOVO)
+    if (vAgua === "sim") xp += 5;
     else xp -= 5;
     
     // Sono
@@ -326,7 +340,7 @@ function calcularXP() {
     else if (vCardio !== "" && cardio >= 30) xp += 3; 
     else xp -= 5;
     
-    // Mente (Tudo -5 se não atingir)
+    // Mente
     const estudo = Number(vEstudo);
     if (vEstudo !== "" && estudo >= 60) xp += 5; 
     else if (vEstudo !== "" && estudo >= 30) xp += 3; 
@@ -349,7 +363,8 @@ function calcularXP() {
 
     // Status
     let status = "NORMAL";
-    if (xp >= 40) status = "ELITE 🔥"; 
+    if (xp >= 50) status = "LENDÁRIO 👑"; // Subi um pouco a régua
+    else if (xp >= 40) status = "ELITE 🔥"; 
     else if (xp >= 30) status = "BOM 🚀"; 
     else if (xp < 10) status = "CRÍTICO 💀";
 
@@ -364,6 +379,7 @@ function calcularXP() {
             pressao_dia: vPressaoDia,
             glicemia: vGlicemia,
             acucar: vAcucar,
+            agua: vAgua,
             sono: vSono,
             treino: vTreino,
             cardio: vCardio,
@@ -388,6 +404,7 @@ function calcularXP() {
     salvar();
 }
 
+// ... Restante das funções iguais ...
 function deletarItem(index) {
     if(confirm("Apagar registro?")) {
         progresso.xpTotal -= progresso.historico[index].xp;
