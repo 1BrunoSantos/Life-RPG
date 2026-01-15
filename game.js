@@ -91,15 +91,15 @@ function stringParaData(dataStr) {
 
 function verificarDiasPerdidos() {
     if (!progresso.historico || progresso.historico.length === 0) return;
-    
+
     const hojeStr = getDataHoje();
     const ultimoRegistroStr = progresso.historico[0].data;
-    
+
     if (hojeStr === ultimoRegistroStr) return;
 
     const dataHoje = stringParaData(hojeStr);
     const dataUltimo = stringParaData(ultimoRegistroStr);
-    
+
     const diffTempo = dataHoje.getTime() - dataUltimo.getTime();
     const diffDias = Math.ceil(diffTempo / (1000 * 60 * 60 * 24)); 
 
@@ -108,7 +108,7 @@ function verificarDiasPerdidos() {
     for (let i = 1; i < diffDias; i++) {
         let diaPerdido = new Date(dataHoje);
         diaPerdido.setDate(dataHoje.getDate() - i); 
-        
+
         const d = String(diaPerdido.getDate()).padStart(2, '0');
         const m = String(diaPerdido.getMonth() + 1).padStart(2, '0');
         const a = diaPerdido.getFullYear();
@@ -144,7 +144,7 @@ setInterval(() => {
     carregarDadosHoje();
 }, 60000);
 
-// ====== INTERFACE ======
+// ====== INTERFACE (UPDATED WITH DAYS) ======
 function calcularNivel() {
     progresso.nivel = Math.floor(progresso.xpTotal / 1000) + 1;
 }
@@ -174,14 +174,21 @@ function atualizarInterface() {
     const xpBanner = document.getElementById("banner-xp");
     const nivelDisplay = document.getElementById("nivel-display");
     if(xpBanner) xpBanner.innerText = `XP: ${progresso.xpTotal}`;
-    if(nivelDisplay) nivelDisplay.innerText = `LEVEL ${progresso.nivel}`; // Translated
+    if(nivelDisplay) nivelDisplay.innerText = `LEVEL ${progresso.nivel}`; 
 
     const listaHistorico = document.getElementById("lista-historico");
     if(listaHistorico) {
         let html = "";
         if(!progresso.historico) progresso.historico = [];
 
+        // 1. Garante ordenação (Mais recente -> Mais antigo)
+        progresso.historico.sort((a, b) => stringParaData(b.data) - stringParaData(a.data));
+
         progresso.historico.forEach((dia, index) => {
+            // 2. Calcula "Day X"
+            // Se temos 10 itens, o index 0 é Day 10, e o último (index 9) é Day 1.
+            let numeroDia = progresso.historico.length - index;
+
             let cor = dia.xp >= 0 ? "#4ade80" : "#f87171";
             let det = dia.detalhes || {};
 
@@ -192,7 +199,7 @@ function atualizarInterface() {
             html += `
             <div class="historico-item">
                 <div class="historico-cabecalho">
-                    <span style="color: #fff; font-weight:bold;">${dia.data}</span>
+                    <span style="color: #fff; font-weight:bold;">Day ${numeroDia} - ${dia.data}</span>
                     <span style="color: ${cor}; font-weight: bold;">${dia.xp} XP</span>
                     <button onclick="deletarItem(${index})" class="btn-lixeira">🗑️</button>
                 </div>
@@ -234,7 +241,7 @@ function renderizarMissoes() {
         }
 
         let porcentagem = 0;
-        
+
         if (missao.start !== undefined) {
             let totalParaPercorrer = Math.abs(missao.start - missao.meta);
             let jaPercorrido = Math.abs(missao.start - missao.atual);
@@ -242,7 +249,7 @@ function renderizarMissoes() {
             else porcentagem = (jaPercorrido / totalParaPercorrer) * 100;
 
             if (missao.start > missao.meta && missao.atual > missao.start) porcentagem = 0;
-            
+
         } else {
             porcentagem = (missao.atual / missao.meta) * 100;
         }
@@ -275,7 +282,7 @@ function renderizarMissoes() {
 // === CHANGE PROGRESS (Smart Steps) ===
 function alterarProgresso(index, direction) {
     let missao = progresso.missoes[index];
-    
+
     let estavaCompleta = false;
     if (missao.start !== undefined && missao.start > missao.meta) {
         estavaCompleta = missao.atual <= missao.meta;
@@ -284,7 +291,7 @@ function alterarProgresso(index, direction) {
     }
 
     let passo = missao.step !== undefined ? missao.step : 5;
-    
+
     if (missao.meta >= 1000 && missao.step === undefined) passo = 100; 
     if (missao.meta >= 100000 && missao.step === undefined) passo = 5000;
 
@@ -294,7 +301,7 @@ function alterarProgresso(index, direction) {
     if (missao.atual < 0) missao.atual = 0;
 
     let completouAgora = false;
-    
+
     if (missao.start !== undefined && missao.start > missao.meta) {
         completouAgora = missao.atual <= missao.meta;
     } else {
@@ -449,9 +456,8 @@ function calcularXP() {
 // === TOOL: ADJUST XP ===
 function ajustarXPManual() {
     const valorAtual = progresso.xpTotal;
-    // Translated Prompt
     const novoValor = prompt(`Current XP: ${valorAtual}\n\nEnter corrected XP (e.g., 500):`);
-    
+
     if (novoValor !== null && novoValor.trim() !== "") {
         const xpNumerico = parseInt(novoValor);
         if (!isNaN(xpNumerico)) {
