@@ -9,7 +9,6 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" href="icon.png">
   <meta name="theme-color" content="#0ea5e9">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   
   <script>
     if ('serviceWorker' in navigator) {
@@ -42,57 +41,93 @@
             <h2>🩺 Saúde</h2>
             
             <div style="display: flex; gap: 10px;">
-                <input type="number" id="pressao_sis" placeholder="Sist. (Ex: 12)" style="width: 50%;">
-                <input type="number" id="pressao_dia" placeholder="Diast. (Ex: 8)" style="width: 50%;">
+                <div class="input-group" style="width: 50%;">
+                    <label>Pressão Sist.</label>
+                    <input type="number" id="pressao_sis" placeholder="Ex: 12">
+                </div>
+                <div class="input-group" style="width: 50%;">
+                    <label>Pressão Diast.</label>
+                    <input type="number" id="pressao_dia" placeholder="Ex: 8">
+                </div>
             </div>
             <div class="regras">🎯 12/8 (3xp) | 11/7 (5xp) | 13/x (2xp) | ≥14 (-5xp)</div>
 
-            <input type="number" id="glicemia" placeholder="Glicemia (Ex: 98)">
+            <div class="input-group">
+                <label>Glicemia</label>
+                <input type="number" id="glicemia" placeholder="Ex: 98">
+            </div>
             <div class="regras">🎯 99-110 (3xp) | &lt;99 (5xp) | &gt;120 (-5xp)</div>
 
-            <select id="acucar">
-                <option value="" disabled selected>Comeu Açúcar / Doce?</option>
-                <option value="nao">Não (Zero Açúcar)</option>
-                <option value="sim">Sim (Comi)</option>
-            </select>
+            <div class="input-group">
+                <label>Açúcar / Doces?</label>
+                <select id="acucar">
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="nao">Não (Zero Açúcar)</option>
+                    <option value="sim">Sim (Comi)</option>
+                </select>
+            </div>
             <div class="regras">🎯 Não (5xp) | Sim (-5xp)</div>
 
-            <select id="agua">
-                <option value="" disabled selected>Bebeu 2 Litros de Água?</option>
-                <option value="sim">Sim (2L+)</option>
-                <option value="nao">Não</option>
-            </select>
+            <div class="input-group">
+                <label>Água (2 Litros)?</label>
+                <select id="agua">
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="sim">Sim (2L+)</option>
+                    <option value="nao">Não</option>
+                </select>
+            </div>
             <div class="regras">🎯 Sim (5xp) | Não (-5xp)</div>
 
-            <input type="number" id="sono" placeholder="Sono (horas)">
+            <div class="input-group">
+                <label>Sono (Horas)</label>
+                <input type="number" id="sono" placeholder="Ex: 7">
+            </div>
             <div class="regras">🎯 5h-6h (3xp) | 7h+ (5xp) | &lt;5h (-5xp)</div>
         </div>
 
         <div class="panel">
             <h2>🏋️ Corpo</h2>
-            <select id="treino">
-                <option value="" disabled selected>Foi no Treino?</option>
-                <option value="sim">Treino: Sim</option>
-                <option value="nao">Treino: Não</option>
-            </select>
+            <div class="input-group">
+                <label>Treino</label>
+                <select id="treino">
+                    <option value="" disabled selected>Foi treinar?</option>
+                    <option value="sim">Sim</option>
+                    <option value="nao">Não</option>
+                </select>
+            </div>
             <div class="regras">🎯 Sim (5xp) | Não (-5xp)</div>
 
-            <input type="number" id="cardio" placeholder="Cardio (min)">
+            <div class="input-group">
+                <label>Cardio (Minutos)</label>
+                <input type="number" id="cardio" placeholder="Ex: 30">
+            </div>
             <div class="regras">🎯 30min (3xp) | 60min (5xp) | &lt;30min (-5xp)</div>
         </div>
 
         <div class="panel">
             <h2>🧠 Mente</h2>
-            <input type="number" id="estudo" placeholder="Estudo (min)">
+            <div class="input-group">
+                <label>Estudo (Minutos)</label>
+                <input type="number" id="estudo" placeholder="Ex: 30">
+            </div>
             <div class="regras">🎯 30min (3xp) | 60min (5xp) | &lt;30min (-5xp)</div>
 
-            <input type="number" id="exercicios" placeholder="Exercícios (qntd)">
+            <div class="input-group">
+                <label>Exercícios (Qtd)</label>
+                <input type="number" id="exercicios" placeholder="Ex: 5">
+            </div>
             <div class="regras">🎯 5 contas (3xp) | 10 contas (5xp) | &lt;5 contas (-5xp)</div>
 
-            <input type="number" id="leitura" placeholder="Leitura (min)">
+            <div class="input-group">
+                <label>Leitura (Minutos)</label>
+                <input type="number" id="leitura" placeholder="Ex: 15">
+            </div>
             <div class="regras">🎯 15min (3xp) | 30min (5xp) | &lt;15min (-5xp)</div>
 
-            <input type="number" id="idioma" placeholder="Idioma (min)">
+            <div class="input-group">
+                <label>Idioma (Minutos)</label>
+                <input type="number" id="idioma" placeholder="Ex: 30">
+            </div>
             <div class="regras">🎯 30min (3xp) | 60min (5xp) | &lt;30min (-5xp)</div>
         </div>
 
@@ -119,12 +154,9 @@
                 <button onclick="importarDados()" style="background: #334155; width: 50%;">📥 COLAR</button>
             </div>
         </div>
-
         <button onclick="resetarDados()" class="btn-reset">🗑️ APAGAR TUDO (RESET)</button>
     </div>
-
   </div>
-
   <script src="game.js"></script>
 </body>
 </html>
