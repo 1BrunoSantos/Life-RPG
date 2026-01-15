@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Life RPG - Bruno Alex</title>
@@ -13,8 +13,8 @@
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js')
-      .then(() => console.log("SW Registrado!"))
-      .catch((err) => console.log("Erro SW:", err));
+      .then(() => console.log("SW Registered!"))
+      .catch((err) => console.log("SW Error:", err));
     }
   </script>
 </head>
@@ -24,139 +24,138 @@
     <h1>LIFE RPG</h1>
     
     <div class="status-header">
-        <div id="nivel-display">NÍVEL 1</div>
+        <div id="nivel-display">LEVEL 1</div>
         <div id="banner-xp" class="xp-banner">XP: 0</div>
     </div>
 
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="abrirTab('tab-status')">STATUS</button>
-        <button class="tab-btn" onclick="abrirTab('tab-missoes')">MISSÕES</button>
-        <button class="tab-btn" onclick="abrirTab('tab-diario')">DIÁRIO</button>
+        <button class="tab-btn" onclick="abrirTab('tab-missoes')">QUESTS</button>
+        <button class="tab-btn" onclick="abrirTab('tab-diario')">LOG</button>
     </div>
 
     <div id="tab-status" class="tab-content active">
-        <p class="subtitle">Meta Diária: ~40 XP</p>
+        <p class="subtitle">Daily Goal: ~40 XP</p>
 
         <div class="panel">
-            <h2>🩺 Saúde</h2>
+            <h2>🩺 Health</h2>
             
             <div style="display: flex; gap: 10px;">
                 <div class="input-group" style="width: 50%;">
-                    <label>Pressão Sist.</label>
+                    <label>Systolic BP (12)</label>
                     <input type="number" id="pressao_sis" placeholder="Ex: 12">
                 </div>
                 <div class="input-group" style="width: 50%;">
-                    <label>Pressão Diast.</label>
+                    <label>Diastolic BP (8)</label>
                     <input type="number" id="pressao_dia" placeholder="Ex: 8">
                 </div>
             </div>
             <div class="regras">🎯 12/8 (3xp) | 11/7 (5xp) | 13/x (2xp) | ≥14 (-5xp)</div>
 
             <div class="input-group">
-                <label>Glicemia</label>
+                <label>Blood Sugar (mg/dL)</label>
                 <input type="number" id="glicemia" placeholder="Ex: 98">
             </div>
             <div class="regras">🎯 99-110 (3xp) | &lt;99 (5xp) | &gt;120 (-5xp)</div>
 
             <div class="input-group">
-                <label>Açúcar / Doces?</label>
+                <label>Sugar / Sweets?</label>
                 <select id="acucar">
-                    <option value="" disabled selected>Selecione...</option>
-                    <option value="nao">Não (Zero Açúcar)</option>
-                    <option value="sim">Sim (Comi)</option>
+                    <option value="" disabled selected>Select...</option>
+                    <option value="nao">No (Zero Sugar)</option>
+                    <option value="sim">Yes (I ate it)</option>
                 </select>
             </div>
-            <div class="regras">🎯 Não (5xp) | Sim (-5xp)</div>
+            <div class="regras">🎯 No (5xp) | Yes (-5xp)</div>
 
             <div class="input-group">
-                <label>Água (2 Litros)?</label>
+                <label>Water (2 Liters)?</label>
                 <select id="agua">
-                    <option value="" disabled selected>Selecione...</option>
-                    <option value="sim">Sim (2L+)</option>
-                    <option value="nao">Não</option>
+                    <option value="" disabled selected>Select...</option>
+                    <option value="sim">Yes (2L+)</option>
+                    <option value="nao">No</option>
                 </select>
             </div>
-            <div class="regras">🎯 Sim (5xp) | Não (-5xp)</div>
+            <div class="regras">🎯 Yes (5xp) | No (-5xp)</div>
 
             <div class="input-group">
-                <label>Sono (Horas)</label>
+                <label>Sleep (Hours)</label>
                 <input type="number" id="sono" placeholder="Ex: 7">
             </div>
             <div class="regras">🎯 5h-6h (3xp) | 7h+ (5xp) | &lt;5h (-5xp)</div>
         </div>
 
         <div class="panel">
-            <h2>🏋️ Corpo</h2>
+            <h2>🏋️ Body</h2>
             <div class="input-group">
-                <label>Treino</label>
+                <label>Workout</label>
                 <select id="treino">
-                    <option value="" disabled selected>Foi treinar?</option>
-                    <option value="sim">Sim</option>
-                    <option value="nao">Não</option>
+                    <option value="" disabled selected>Did you train?</option>
+                    <option value="sim">Yes</option>
+                    <option value="nao">No</option>
                 </select>
             </div>
-            <div class="regras">🎯 Sim (5xp) | Não (-5xp)</div>
+            <div class="regras">🎯 Yes (5xp) | No (-5xp)</div>
 
             <div class="input-group">
-                <label>Cardio (Minutos)</label>
+                <label>Cardio (Minutes)</label>
                 <input type="number" id="cardio" placeholder="Ex: 30">
             </div>
             <div class="regras">🎯 30min (3xp) | 60min (5xp) | &lt;30min (-5xp)</div>
         </div>
 
         <div class="panel">
-            <h2>🧠 Mente</h2>
+            <h2>🧠 Mind</h2>
             <div class="input-group">
-                <label>Estudo (Minutos)</label>
+                <label>Study (Minutes)</label>
                 <input type="number" id="estudo" placeholder="Ex: 30">
             </div>
             <div class="regras">🎯 30min (3xp) | 60min (5xp) | &lt;30min (-5xp)</div>
 
             <div class="input-group">
-                <label>Exercícios (Qtd)</label>
+                <label>Math Exercises (Qty)</label>
                 <input type="number" id="exercicios" placeholder="Ex: 5">
             </div>
-            <div class="regras">🎯 5 contas (3xp) | 10 contas (5xp) | &lt;5 contas (-5xp)</div>
+            <div class="regras">🎯 5 items (3xp) | 10 items (5xp) | &lt;5 items (-5xp)</div>
 
             <div class="input-group">
-                <label>Leitura (Minutos)</label>
+                <label>Reading (Minutes)</label>
                 <input type="number" id="leitura" placeholder="Ex: 15">
             </div>
             <div class="regras">🎯 15min (3xp) | 30min (5xp) | &lt;15min (-5xp)</div>
 
             <div class="input-group">
-                <label>Idioma (Minutos)</label>
+                <label>Language Learning (Min)</label>
                 <input type="number" id="idioma" placeholder="Ex: 30">
             </div>
             <div class="regras">🎯 30min (3xp) | 60min (5xp) | &lt;30min (-5xp)</div>
         </div>
 
-        <button onclick="calcularXP()" class="btn-action">CALCULAR XP DO DIA</button>
+        <button onclick="calcularXP()" class="btn-action">CALCULATE DAILY XP</button>
         <div id="msg-erro" class="error-msg"></div>
         <div id="resultado" class="resultado" style="display:none;"></div>
     </div>
 
     <div id="tab-missoes" class="tab-content">
-        <p class="subtitle">Quest Log (0-100%) - Recompensa: 1000 XP</p>
+        <p class="subtitle">Quest Log (0-100%) - Reward: 1000 XP</p>
         <div id="container-missoes"></div>
     </div>
 
     <div id="tab-diario" class="tab-content">
         <div class="historico-container">
-            <h3>📜 Registro Detalhado</h3>
+            <h3>📜 Detailed Log</h3>
             <div id="lista-historico"></div>
         </div>
         
         <div class="panel" style="margin-top: 30px; border-color: #f59e0b;">
-            <h2 style="color: #f59e0b;">💾 Backup & Ferramentas</h2>
+            <h2 style="color: #f59e0b;">💾 Backup & Tools</h2>
             <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                <button onclick="exportarDados()" style="background: #334155; width: 50%;">📤 COPIAR</button>
-                <button onclick="importarDados()" style="background: #334155; width: 50%;">📥 COLAR</button>
+                <button onclick="exportarDados()" style="background: #334155; width: 50%;">📤 COPY</button>
+                <button onclick="importarDados()" style="background: #334155; width: 50%;">📥 PASTE</button>
             </div>
-            <button onclick="ajustarXPManual()" style="background: #0ea5e9; width: 100%; font-weight:bold; margin-top:5px;">🛠️ AJUSTAR XP</button>
+            <button onclick="ajustarXPManual()" style="background: #0ea5e9; width: 100%; font-weight:bold; margin-top:5px;">🛠️ ADJUST XP</button>
         </div>
-        
-        <button onclick="resetarDados()" class="btn-reset">🗑️ APAGAR TUDO (RESET)</button>
+        <button onclick="resetarDados()" class="btn-reset">🗑️ RESET ALL DATA</button>
     </div>
   </div>
   <script src="game.js"></script>
