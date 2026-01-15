@@ -1,44 +1,42 @@
 // ====== LISTA PADRONIZADA ======
 const listaMissoesPadrao = [
-  // --- CARREIRA ---
   { id: 1, cat: "Carreira & Estudos", titulo: "Concluir Pós-Graduação", atual: 0, meta: 100, unidade: "%" },
   { id: 2, cat: "Carreira & Estudos", titulo: "Estudar para Enem", atual: 0, meta: 100, unidade: "%" },
   { id: 3, cat: "Carreira & Estudos", titulo: "Ingressar na Eng. Elétrica IFSP", atual: 0, meta: 100, unidade: "%" },
   { id: 4, cat: "Carreira & Estudos", titulo: "Ser efetivado ISA Energia", atual: 0, meta: 100, unidade: "%" },
   { id: 5, cat: "Carreira & Estudos", titulo: "Obter registro Eletrotécnico", atual: 0, meta: 100, unidade: "%" },
   { id: 6, cat: "Carreira & Estudos", titulo: "Dominar Mat/Fís/Elé", atual: 0, meta: 100, unidade: "%" },
-  { id: 7, cat: "Carreira & Estudos", titulo: "Poliglota (Falar 4 Idiomas)", atual: 0, meta: 4, unidade: "idiomas", step: 1 },
+  { id: 7, cat: "Carreira & Estudos", titulo: "Poliglota (Falar 4 Idiomas)", atual: 0, meta: 4, unidade: "idiomas" },
   { id: 8, cat: "Carreira & Estudos", titulo: "Inglês C2 (Fluência)", atual: 0, meta: 100, unidade: "%" },
-  
-  // --- SAÚDE (Missões Decrescentes adicionadas aqui) ---
   { id: 9, cat: "Saúde & Físico", titulo: "Pressão/Glicemia Estabilizadas", atual: 0, meta: 100, unidade: "%" },
-  
-  // PESO: Começa em 100, Meta 80. Passo de 1 em 1.
-  { id: 10, cat: "Saúde & Físico", titulo: "Alcançar Peso Ideal (80kg)", atual: 100, meta: 80, start: 100, step: 1, unidade: "kg" },
-  
+  { id: 10, cat: "Saúde & Físico", titulo: "Alcançar Peso Ideal (80kg)", atual: 100, meta: 80, unidade: "kg", start: 100 },
   { id: 11, cat: "Saúde & Físico", titulo: "Aprender a Nadar", atual: 0, meta: 100, unidade: "%" },
   { id: 12, cat: "Habilidades & Lazer", titulo: "Aprender Cavaquinho", atual: 0, meta: 100, unidade: "%" },
-  { id: 13, cat: "Habilidades & Lazer", titulo: "Meta Leitura Anual", atual: 0, meta: 12, unidade: "Livros", step: 1 },
+  { id: 13, cat: "Habilidades & Lazer", titulo: "Meta Leitura Anual", atual: 0, meta: 12, unidade: "Livros" },
   { id: 14, cat: "Habilidades & Lazer", titulo: "Viajar para Outro País", atual: 0, meta: 100, unidade: "%" },
-  
-  // --- FINANCEIRO ---
   { id: 15, cat: "Financeiro & Bens", titulo: "Limpar o Nome", atual: 0, meta: 100, unidade: "%" },
-  { id: 16, cat: "Financeiro & Bens", titulo: "Salário de 10k/mês", atual: 0, meta: 10000, unidade: "R$", step: 100 },
-  { id: 17, cat: "Financeiro & Bens", titulo: "Patrimônio 1 Milhão", atual: 0, meta: 1000000, unidade: "R$", step: 1000 },
+  { id: 16, cat: "Financeiro & Bens", titulo: "Salário de 10k/mês", atual: 0, meta: 10000, unidade: "R$" },
+  { id: 17, cat: "Financeiro & Bens", titulo: "Patrimônio 1 Milhão", atual: 0, meta: 1000000, unidade: "R$" },
   { id: 18, cat: "Financeiro & Bens", titulo: "Comprar Casa Própria", atual: 0, meta: 100, unidade: "%" },
-  { id: 19, cat: "Financeiro & Bens", titulo: "Comprar Moto", atual: 0, meta: 10000, unidade: "R$", step: 500 },
-  { id: 20, cat: "Financeiro & Bens", titulo: "Comprar Carro Automático", atual: 0, meta: 50000, unidade: "R$", step: 500 },
+  { id: 19, cat: "Financeiro & Bens", titulo: "Comprar Moto", atual: 0, meta: 10000, unidade: "R$" },
+  { id: 20, cat: "Financeiro & Bens", titulo: "Comprar Carro Automático", atual: 0, meta: 50000, unidade: "R$" },
   { id: 21, cat: "Financeiro & Bens", titulo: "Me casar", atual: 0, meta: 100, unidade: "%" },
-
-  // --- NOVAS ---
-  { id: 22, cat: "Saúde & Físico", titulo: "30 Dias Zero Açúcar", atual: 0, meta: 30, unidade: "dias", step: 1 },
-  { id: 24, cat: "Saúde & Físico", titulo: "Musculação 5x/semana (3 meses)", atual: 0, meta: 60, unidade: "treinos", step: 1 },
-  
-  // GLICADA: Começa em 9, Meta 5. Passo de 0.1
-  { id: 26, cat: "Saúde & Físico", titulo: "Baixar Glicada para 5%", atual: 9.0, meta: 5.0, start: 9.0, step: 0.1, unidade: "%" },
+  // MISSÕES ADICIONAIS
+  { id: 22, cat: "Saúde & Físico", titulo: "30 Dias Zero Açúcar", atual: 0, meta: 30, unidade: "dias" },
+  { id: 24, cat: "Saúde & Físico", titulo: "Musculação 5x/semana (3 meses)", atual: 0, meta: 60, unidade: "treinos" },
+  { id: 26, cat: "Saúde & Físico", titulo: "Baixar Glicada para 5%", atual: 9, meta: 5, unidade: "%", start: 9 },
 ];
 
 const inputIds = ["pressao_sis", "pressao_dia", "glicemia", "acucar", "agua", "sono", "treino", "cardio", "estudo", "exercicios", "leitura", "idioma"];
+
+// ====== FUNÇÃO DE DATA SEGURA (Evita bugs de fuso/locale) ======
+function getDataHoje() {
+    const d = new Date();
+    const dia = String(d.getDate()).padStart(2, '0');
+    const mes = String(d.getMonth() + 1).padStart(2, '0');
+    const ano = d.getFullYear();
+    return `${dia}/${mes}/${ano}`;
+}
 
 // ====== INICIALIZAÇÃO ======
 let progresso = JSON.parse(localStorage.getItem("lifeRPG")) || {
@@ -55,18 +53,10 @@ if (progresso.missoes) {
         if (!existe) {
             progresso.missoes.push(JSON.parse(JSON.stringify(padrao)));
         } else {
-            // Atualiza propriedades importantes para refletir a nova lógica
             existe.titulo = padrao.titulo;
             existe.meta = padrao.meta;
             existe.unidade = padrao.unidade;
-            existe.step = padrao.step;
-            existe.start = padrao.start;
-            
-            // Se o valor atual for 0 (padrão antigo) e a missão tiver um 'start' diferente (ex: 100kg), atualiza
-            // Mas só se o usuário ainda não tiver mexido (meta antiga era diferente ou atual era 0)
-            if (padrao.start !== undefined && (existe.atual === 0 || existe.atual === undefined)) {
-                existe.atual = padrao.start;
-            }
+            if (padrao.start !== undefined) existe.start = padrao.start;
         }
     });
     localStorage.setItem("lifeRPG", JSON.stringify(progresso));
@@ -94,26 +84,37 @@ function abrirTab(tabId) {
 function stringParaData(dataStr) {
     if(!dataStr) return new Date();
     const partes = dataStr.split('/');
+    // partes[2] = Ano, partes[1] = Mês, partes[0] = Dia
     return new Date(partes[2], partes[1] - 1, partes[0]);
 }
 
 function verificarDiasPerdidos() {
     if (!progresso.historico || progresso.historico.length === 0) return;
-    const hojeStr = new Date().toLocaleDateString("pt-BR");
+    
+    const hojeStr = getDataHoje();
     const ultimoRegistroStr = progresso.historico[0].data;
+    
     if (hojeStr === ultimoRegistroStr) return;
 
     const dataHoje = stringParaData(hojeStr);
     const dataUltimo = stringParaData(ultimoRegistroStr);
-    const diffTempo = dataHoje - dataUltimo;
+    
+    // Calcula diferença em dias (ignora horas)
+    const diffTempo = dataHoje.getTime() - dataUltimo.getTime();
     const diffDias = Math.ceil(diffTempo / (1000 * 60 * 60 * 24)); 
 
     let diasPenalizados = 0;
 
+    // Se a diferença for > 1, significa que pulou pelo menos 1 dia
     for (let i = 1; i < diffDias; i++) {
         let diaPerdido = new Date(dataHoje);
         diaPerdido.setDate(dataHoje.getDate() - i); 
-        let dataPerdidaStr = diaPerdido.toLocaleDateString("pt-BR");
+        
+        // Formatação manual segura
+        const d = String(diaPerdido.getDate()).padStart(2, '0');
+        const m = String(diaPerdido.getMonth() + 1).padStart(2, '0');
+        const a = diaPerdido.getFullYear();
+        let dataPerdidaStr = `${d}/${m}/${a}`;
 
         if (!progresso.historico.find(d => d.data === dataPerdidaStr)) {
             let xpPerdido = -50; 
@@ -151,7 +152,7 @@ function calcularNivel() {
 }
 
 function carregarDadosHoje() {
-    const hoje = new Date().toLocaleDateString("pt-BR");
+    const hoje = getDataHoje();
     const registroHoje = progresso.historico.find(dia => dia.data === hoje);
 
     inputIds.forEach(id => {
@@ -234,30 +235,23 @@ function renderizarMissoes() {
             html += `<div class="categoria-titulo">${categoriaAtual}</div>`;
         }
 
-        // --- CÁLCULO INTELIGENTE DA BARRA DE PROGRESSO ---
         let porcentagem = 0;
         
         if (missao.start !== undefined) {
-            // Lógica para missões com INÍCIO e FIM (Ex: Peso 100 -> 80)
             let totalParaPercorrer = Math.abs(missao.start - missao.meta);
             let jaPercorrido = Math.abs(missao.start - missao.atual);
-            
-            // Proteção contra divisão por zero
             if (totalParaPercorrer === 0) porcentagem = 100;
             else porcentagem = (jaPercorrido / totalParaPercorrer) * 100;
 
-            // Se for perda de peso/glicada, e o atual for MAIOR que o inicio (engordou), é 0%
             if (missao.start > missao.meta && missao.atual > missao.start) porcentagem = 0;
             
         } else {
-            // Lógica padrão (0 -> Meta)
             porcentagem = (missao.atual / missao.meta) * 100;
         }
 
         if (porcentagem > 100) porcentagem = 100;
         if (porcentagem < 0) porcentagem = 0;
 
-        // Formatação do valor (evita 9.100000001)
         let valorMostrado = missao.atual;
         if (!Number.isInteger(valorMostrado)) valorMostrado = valorMostrado.toFixed(1);
 
@@ -280,52 +274,43 @@ function renderizarMissoes() {
     container.innerHTML = html;
 }
 
-// === ALTERAR PROGRESSO (COM LÓGICA DECRESCENTE) ===
+// === ALTERAR PROGRESSO ===
 function alterarProgresso(index, direction) {
     let missao = progresso.missoes[index];
     
-    // Verifica conclusão antes da alteração
     let estavaCompleta = false;
     if (missao.start !== undefined && missao.start > missao.meta) {
-        // Missão Decrescente (Peso/Glicada): Completa se Atual <= Meta
         estavaCompleta = missao.atual <= missao.meta;
     } else {
-        // Padrão: Completa se Atual >= Meta
         estavaCompleta = missao.atual >= missao.meta;
     }
 
-    // Define o passo (step) ou usa 5 como padrão
     let passo = missao.step !== undefined ? missao.step : 5;
     
-    // Aplica alteração
+    // Incrementar metas grandes mais rápido
+    if (missao.meta >= 1000 && missao.step === undefined) passo = 100; 
+    if (missao.meta >= 100000 && missao.step === undefined) passo = 5000;
+
     missao.atual += (direction * passo);
-    
-    // Arredonda para evitar erros de ponto flutuante (ex: 9.1 + 0.1 = 9.2)
     missao.atual = Math.round(missao.atual * 100) / 100;
 
-    // Limites lógicos
     if (missao.atual < 0) missao.atual = 0;
 
-    // --- VERIFICAÇÃO DE CONCLUSÃO PÓS-ALTERAÇÃO ---
     let completouAgora = false;
     
     if (missao.start !== undefined && missao.start > missao.meta) {
-        // Decrescente: Completou se chegou na meta ou desceu mais
         completouAgora = missao.atual <= missao.meta;
     } else {
-        // Padrão
         completouAgora = missao.atual >= missao.meta;
-        if (missao.atual > missao.meta) missao.atual = missao.meta; // Trava no máximo
+        if (missao.atual > missao.meta) missao.atual = missao.meta; 
     }
 
-    // BÔNUS
     if (!estavaCompleta && completouAgora) {
         const bonus = 1000;
         progresso.xpTotal += bonus;
         alert(`🎉 PARABÉNS! Missão "${missao.titulo}" Concluída!\n\nVocê ganhou +${bonus} XP e subiu de nível! 🚀`);
     }
 
-    // PENALIDADE (Se desfez a conquista)
     if (estavaCompleta && !completouAgora) {
         const penalty = 1000;
         progresso.xpTotal -= penalty;
@@ -338,7 +323,7 @@ function alterarProgresso(index, direction) {
 function calcularXP() {
     const msgErro = document.getElementById("msg-erro");
     msgErro.innerHTML = "";
-    const hoje = new Date().toLocaleDateString("pt-BR");
+    const hoje = getDataHoje(); // Data Segura
 
     const indexHoje = progresso.historico.findIndex(dia => dia.data === hoje);
     let xpAnterior = 0;
@@ -462,6 +447,23 @@ function calcularXP() {
     salvar();
 }
 
+// === FERRAMENTA: AJUSTE MANUAL DE XP ===
+function ajustarXPManual() {
+    const valorAtual = progresso.xpTotal;
+    const novoValor = prompt(`Seu XP atual é: ${valorAtual}\n\nDigite o novo valor correto (ex: 500):`);
+    
+    if (novoValor !== null && novoValor.trim() !== "") {
+        const xpNumerico = parseInt(novoValor);
+        if (!isNaN(xpNumerico)) {
+            progresso.xpTotal = xpNumerico;
+            salvar();
+            alert(`✅ XP Ajustado para ${xpNumerico}!`);
+        } else {
+            alert("❌ Valor inválido. Digite apenas números.");
+        }
+    }
+}
+
 function deletarItem(index) {
     if(confirm("Apagar registro?")) {
         progresso.xpTotal -= progresso.historico[index].xp;
@@ -498,6 +500,7 @@ function importarDados() {
     }
 }
 
+// Inicia
 verificarDiasPerdidos();
 carregarDadosHoje();
 atualizarInterface();
