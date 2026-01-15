@@ -6,13 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-<link rel="manifest" href="manifest.json">
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js');
-  }
-</script>
-
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="icon.png">
+  <meta name="theme-color" content="#0ea5e9">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js')
+      .then(() => console.log("SW Registrado!"))
+      .catch((err) => console.log("Erro SW:", err));
+    }
+  </script>
 </head>
 <body>
 
@@ -31,7 +36,7 @@
     </div>
 
     <div id="tab-status" class="tab-content active">
-        <p class="subtitle">Meta Diária: ~35 XP</p>
+        <p class="subtitle">Meta Diária: ~40 XP</p>
 
         <div class="panel">
             <h2>🩺 Saúde</h2>
@@ -52,6 +57,13 @@
             </select>
             <div class="regras">🎯 Não (5xp) | Sim (-5xp)</div>
 
+            <select id="agua">
+                <option value="" disabled selected>Bebeu 2 Litros de Água?</option>
+                <option value="sim">Sim (2L+)</option>
+                <option value="nao">Não</option>
+            </select>
+            <div class="regras">🎯 Sim (5xp) | Não (-5xp)</div>
+
             <input type="number" id="sono" placeholder="Sono (horas)">
             <div class="regras">🎯 5h-6h (3xp) | 7h+ (5xp) | &lt;5h (-5xp)</div>
         </div>
@@ -59,9 +71,9 @@
         <div class="panel">
             <h2>🏋️ Corpo</h2>
             <select id="treino">
-                <option value="" disabled selected>Treinou hoje?</option>
-                <option value="sim">Treinou: Sim</option>
-                <option value="nao">Treinou: Não</option>
+                <option value="" disabled selected>Foi no Treino?</option>
+                <option value="sim">Treino: Sim</option>
+                <option value="nao">Treino: Não</option>
             </select>
             <div class="regras">🎯 Sim (5xp) | Não (-5xp)</div>
 
@@ -90,7 +102,7 @@
     </div>
 
     <div id="tab-missoes" class="tab-content">
-        <p class="subtitle">Quest Log (0-100%)</p>
+        <p class="subtitle">Quest Log (0-100%) - Recompensa: 1000 XP</p>
         <div id="container-missoes"></div>
     </div>
 
