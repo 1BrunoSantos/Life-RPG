@@ -1,30 +1,41 @@
 // ====== LISTA PADRONIZADA ======
 const listaMissoesPadrao = [
+  // --- CARREIRA ---
   { id: 1, cat: "Carreira & Estudos", titulo: "Concluir Pós-Graduação", atual: 0, meta: 100, unidade: "%" },
   { id: 2, cat: "Carreira & Estudos", titulo: "Estudar para Enem", atual: 0, meta: 100, unidade: "%" },
   { id: 3, cat: "Carreira & Estudos", titulo: "Ingressar na Eng. Elétrica IFSP", atual: 0, meta: 100, unidade: "%" },
   { id: 4, cat: "Carreira & Estudos", titulo: "Ser efetivado ISA Energia", atual: 0, meta: 100, unidade: "%" },
   { id: 5, cat: "Carreira & Estudos", titulo: "Obter registro Eletrotécnico", atual: 0, meta: 100, unidade: "%" },
   { id: 6, cat: "Carreira & Estudos", titulo: "Dominar Mat/Fís/Elé", atual: 0, meta: 100, unidade: "%" },
-  { id: 7, cat: "Carreira & Estudos", titulo: "Poliglota (Falar 4 Idiomas)", atual: 0, meta: 4, unidade: "idiomas" },
+  { id: 7, cat: "Carreira & Estudos", titulo: "Poliglota (Falar 4 Idiomas)", atual: 0, meta: 4, unidade: "idiomas", step: 1 },
   { id: 8, cat: "Carreira & Estudos", titulo: "Inglês C2 (Fluência)", atual: 0, meta: 100, unidade: "%" },
+  
+  // --- SAÚDE (Missões Decrescentes adicionadas aqui) ---
   { id: 9, cat: "Saúde & Físico", titulo: "Pressão/Glicemia Estabilizadas", atual: 0, meta: 100, unidade: "%" },
-  { id: 10, cat: "Saúde & Físico", titulo: "Alcançar Peso Ideal (80kg)", atual: 100, meta: 80, unidade: "kg" },
+  
+  // PESO: Começa em 100, Meta 80. Passo de 1 em 1.
+  { id: 10, cat: "Saúde & Físico", titulo: "Alcançar Peso Ideal (80kg)", atual: 100, meta: 80, start: 100, step: 1, unidade: "kg" },
+  
   { id: 11, cat: "Saúde & Físico", titulo: "Aprender a Nadar", atual: 0, meta: 100, unidade: "%" },
   { id: 12, cat: "Habilidades & Lazer", titulo: "Aprender Cavaquinho", atual: 0, meta: 100, unidade: "%" },
-  { id: 13, cat: "Habilidades & Lazer", titulo: "Meta Leitura Anual", atual: 0, meta: 12, unidade: "Livros" },
+  { id: 13, cat: "Habilidades & Lazer", titulo: "Meta Leitura Anual", atual: 0, meta: 12, unidade: "Livros", step: 1 },
   { id: 14, cat: "Habilidades & Lazer", titulo: "Viajar para Outro País", atual: 0, meta: 100, unidade: "%" },
+  
+  // --- FINANCEIRO ---
   { id: 15, cat: "Financeiro & Bens", titulo: "Limpar o Nome", atual: 0, meta: 100, unidade: "%" },
-  { id: 16, cat: "Financeiro & Bens", titulo: "Salário de 10k/mês", atual: 0, meta: 10000, unidade: "R$" },
-  { id: 17, cat: "Financeiro & Bens", titulo: "Patrimônio 1 Milhão", atual: 0, meta: 1000000, unidade: "R$" },
+  { id: 16, cat: "Financeiro & Bens", titulo: "Salário de 10k/mês", atual: 0, meta: 10000, unidade: "R$", step: 100 },
+  { id: 17, cat: "Financeiro & Bens", titulo: "Patrimônio 1 Milhão", atual: 0, meta: 1000000, unidade: "R$", step: 1000 },
   { id: 18, cat: "Financeiro & Bens", titulo: "Comprar Casa Própria", atual: 0, meta: 100, unidade: "%" },
-  { id: 19, cat: "Financeiro & Bens", titulo: "Comprar Moto", atual: 0, meta: 10000, unidade: "R$" },
-  { id: 20, cat: "Financeiro & Bens", titulo: "Comprar Carro Automático", atual: 0, meta: 50000, unidade: "R$" },
+  { id: 19, cat: "Financeiro & Bens", titulo: "Comprar Moto", atual: 0, meta: 10000, unidade: "R$", step: 500 },
+  { id: 20, cat: "Financeiro & Bens", titulo: "Comprar Carro Automático", atual: 0, meta: 50000, unidade: "R$", step: 500 },
   { id: 21, cat: "Financeiro & Bens", titulo: "Me casar", atual: 0, meta: 100, unidade: "%" },
-  // MISSÕES ADICIONAIS
-  { id: 22, cat: "Saúde & Físico", titulo: "30 Dias Zero Açúcar", atual: 0, meta: 30, unidade: "dias" },
-  { id: 24, cat: "Saúde & Físico", titulo: "Musculação 5x/semana (3 meses)", atual: 0, meta: 60, unidade: "treinos" },
-  { id: 26, cat: "Saúde & Físico", titulo: "Baixar Glicada para 5%", atual: 9, meta: 5, unidade: "%" },
+
+  // --- NOVAS ---
+  { id: 22, cat: "Saúde & Físico", titulo: "30 Dias Zero Açúcar", atual: 0, meta: 30, unidade: "dias", step: 1 },
+  { id: 24, cat: "Saúde & Físico", titulo: "Musculação 5x/semana (3 meses)", atual: 0, meta: 60, unidade: "treinos", step: 1 },
+  
+  // GLICADA: Começa em 9, Meta 5. Passo de 0.1
+  { id: 26, cat: "Saúde & Físico", titulo: "Baixar Glicada para 5%", atual: 9.0, meta: 5.0, start: 9.0, step: 0.1, unidade: "%" },
 ];
 
 const inputIds = ["pressao_sis", "pressao_dia", "glicemia", "acucar", "agua", "sono", "treino", "cardio", "estudo", "exercicios", "leitura", "idioma"];
@@ -44,9 +55,18 @@ if (progresso.missoes) {
         if (!existe) {
             progresso.missoes.push(JSON.parse(JSON.stringify(padrao)));
         } else {
+            // Atualiza propriedades importantes para refletir a nova lógica
             existe.titulo = padrao.titulo;
             existe.meta = padrao.meta;
             existe.unidade = padrao.unidade;
+            existe.step = padrao.step;
+            existe.start = padrao.start;
+            
+            // Se o valor atual for 0 (padrão antigo) e a missão tiver um 'start' diferente (ex: 100kg), atualiza
+            // Mas só se o usuário ainda não tiver mexido (meta antiga era diferente ou atual era 0)
+            if (padrao.start !== undefined && (existe.atual === 0 || existe.atual === undefined)) {
+                existe.atual = padrao.start;
+            }
         }
     });
     localStorage.setItem("lifeRPG", JSON.stringify(progresso));
@@ -157,7 +177,6 @@ function atualizarInterface() {
     if(xpBanner) xpBanner.innerText = `XP: ${progresso.xpTotal}`;
     if(nivelDisplay) nivelDisplay.innerText = `NÍVEL ${progresso.nivel}`;
 
-    // === HISTÓRICO ATUALIZADO ===
     const listaHistorico = document.getElementById("lista-historico");
     if(listaHistorico) {
         let html = "";
@@ -215,25 +234,41 @@ function renderizarMissoes() {
             html += `<div class="categoria-titulo">${categoriaAtual}</div>`;
         }
 
-        let porcentagem = missao.atual;
+        // --- CÁLCULO INTELIGENTE DA BARRA DE PROGRESSO ---
+        let porcentagem = 0;
         
-        // Tratamento visual para barras
-        let barraWidth = (missao.atual / missao.meta) * 100;
-        if (barraWidth > 100) barraWidth = 100;
-        
-        // Caso especial: Meta invertida (Glicada - quanto menor melhor)
-        // Se a meta for 5 e o atual for 9, não é 180% concluído.
-        // Vou deixar a barra estática cheia se estiver acima da meta para não confundir,
-        // mas o texto mostrará a realidade.
+        if (missao.start !== undefined) {
+            // Lógica para missões com INÍCIO e FIM (Ex: Peso 100 -> 80)
+            let totalParaPercorrer = Math.abs(missao.start - missao.meta);
+            let jaPercorrido = Math.abs(missao.start - missao.atual);
+            
+            // Proteção contra divisão por zero
+            if (totalParaPercorrer === 0) porcentagem = 100;
+            else porcentagem = (jaPercorrido / totalParaPercorrer) * 100;
+
+            // Se for perda de peso/glicada, e o atual for MAIOR que o inicio (engordou), é 0%
+            if (missao.start > missao.meta && missao.atual > missao.start) porcentagem = 0;
+            
+        } else {
+            // Lógica padrão (0 -> Meta)
+            porcentagem = (missao.atual / missao.meta) * 100;
+        }
+
+        if (porcentagem > 100) porcentagem = 100;
+        if (porcentagem < 0) porcentagem = 0;
+
+        // Formatação do valor (evita 9.100000001)
+        let valorMostrado = missao.atual;
+        if (!Number.isInteger(valorMostrado)) valorMostrado = valorMostrado.toFixed(1);
 
         html += `
         <div class="missao-card">
             <div class="missao-header">
                 <span>${missao.titulo}</span>
-                <span>${missao.atual} / ${missao.meta} ${missao.unidade || ''}</span>
+                <span>${valorMostrado} / ${missao.meta} ${missao.unidade || ''}</span>
             </div>
             <div class="barra-fundo">
-                <div class="barra-progresso" style="width: ${barraWidth}%"></div>
+                <div class="barra-progresso" style="width: ${porcentagem}%"></div>
             </div>
             <div class="botoes-progresso">
                 <button class="btn-small" onclick="alterarProgresso(${index}, -1)">-</button>
@@ -245,30 +280,52 @@ function renderizarMissoes() {
     container.innerHTML = html;
 }
 
-// === LÓGICA DE BÔNUS DE MISSÃO (1000 XP) ===
-function alterarProgresso(index, valor) {
+// === ALTERAR PROGRESSO (COM LÓGICA DECRESCENTE) ===
+function alterarProgresso(index, direction) {
     let missao = progresso.missoes[index];
-    const estavaCompleta = missao.atual >= missao.meta;
-
-    // Incremento inteligente para metas grandes
-    let incremento = 1;
-    if (missao.meta >= 1000) incremento = 100; 
-    if (missao.meta >= 100000) incremento = 5000;
-
-    missao.atual += (valor * incremento); 
-
-    if (missao.atual < 0) missao.atual = 0;
     
-    const completouAgora = missao.atual >= missao.meta;
+    // Verifica conclusão antes da alteração
+    let estavaCompleta = false;
+    if (missao.start !== undefined && missao.start > missao.meta) {
+        // Missão Decrescente (Peso/Glicada): Completa se Atual <= Meta
+        estavaCompleta = missao.atual <= missao.meta;
+    } else {
+        // Padrão: Completa se Atual >= Meta
+        estavaCompleta = missao.atual >= missao.meta;
+    }
 
-    // Se completou agora (e não estava completa antes)
+    // Define o passo (step) ou usa 5 como padrão
+    let passo = missao.step !== undefined ? missao.step : 5;
+    
+    // Aplica alteração
+    missao.atual += (direction * passo);
+    
+    // Arredonda para evitar erros de ponto flutuante (ex: 9.1 + 0.1 = 9.2)
+    missao.atual = Math.round(missao.atual * 100) / 100;
+
+    // Limites lógicos
+    if (missao.atual < 0) missao.atual = 0;
+
+    // --- VERIFICAÇÃO DE CONCLUSÃO PÓS-ALTERAÇÃO ---
+    let completouAgora = false;
+    
+    if (missao.start !== undefined && missao.start > missao.meta) {
+        // Decrescente: Completou se chegou na meta ou desceu mais
+        completouAgora = missao.atual <= missao.meta;
+    } else {
+        // Padrão
+        completouAgora = missao.atual >= missao.meta;
+        if (missao.atual > missao.meta) missao.atual = missao.meta; // Trava no máximo
+    }
+
+    // BÔNUS
     if (!estavaCompleta && completouAgora) {
         const bonus = 1000;
         progresso.xpTotal += bonus;
         alert(`🎉 PARABÉNS! Missão "${missao.titulo}" Concluída!\n\nVocê ganhou +${bonus} XP e subiu de nível! 🚀`);
     }
 
-    // Se desmarcou (caiu abaixo da meta)
+    // PENALIDADE (Se desfez a conquista)
     if (estavaCompleta && !completouAgora) {
         const penalty = 1000;
         progresso.xpTotal -= penalty;
