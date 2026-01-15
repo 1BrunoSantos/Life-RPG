@@ -15,13 +15,13 @@ const listaMissoesPadrao = [
   { id: 13, cat: "Habilidades & Lazer", titulo: "Meta Leitura Anual", atual: 0, meta: 12, unidade: "Livros" },
   { id: 14, cat: "Habilidades & Lazer", titulo: "Viajar para Outro País", atual: 0, meta: 100, unidade: "%" },
   { id: 15, cat: "Financeiro & Bens", titulo: "Limpar o Nome", atual: 0, meta: 100, unidade: "%" },
-  { id: 16, cat: "Financeiro & Bens", titulo: "Salário de 10k/mês", atual: 0, meta: 10000, unidade: "reais" },
-  { id: 17, cat: "Financeiro & Bens", titulo: "Patrimônio 1 Milhão", atual: 0, meta: 1000000, unidade: "reais" },
+  { id: 16, cat: "Financeiro & Bens", titulo: "Salário de 10k/mês", atual: 0, meta: 10000, unidade: "R$" },
+  { id: 17, cat: "Financeiro & Bens", titulo: "Patrimônio 1 Milhão", atual: 0, meta: 1000000, unidade: "R$" },
   { id: 18, cat: "Financeiro & Bens", titulo: "Comprar Casa Própria", atual: 0, meta: 100, unidade: "%" },
-  { id: 19, cat: "Financeiro & Bens", titulo: "Comprar Moto", atual: 0, meta: 10000, unidade: "reais" },
-  { id: 20, cat: "Financeiro & Bens", titulo: "Comprar Carro Automático", atual: 0, meta: 50000, unidade: "reais" },
-{ id: 21, cat: "Financeiro & Bens", titulo: "Me casar", atual: 0, meta: 100, unidade: "%" },
-  // MISSÕES NOVAS/ATUALIZADAS (IDs Novos para forçar atualização)
+  { id: 19, cat: "Financeiro & Bens", titulo: "Comprar Moto", atual: 0, meta: 10000, unidade: "R$" },
+  { id: 20, cat: "Financeiro & Bens", titulo: "Comprar Carro Automático", atual: 0, meta: 50000, unidade: "R$" },
+  { id: 21, cat: "Financeiro & Bens", titulo: "Me casar", atual: 0, meta: 100, unidade: "%" },
+  // MISSÕES ADICIONAIS
   { id: 22, cat: "Saúde & Físico", titulo: "30 Dias Zero Açúcar", atual: 0, meta: 30, unidade: "dias" },
   { id: 24, cat: "Saúde & Físico", titulo: "Musculação 5x/semana (3 meses)", atual: 0, meta: 60, unidade: "treinos" },
   { id: 26, cat: "Saúde & Físico", titulo: "Baixar Glicada para 5%", atual: 9, meta: 5, unidade: "%" },
@@ -44,9 +44,9 @@ if (progresso.missoes) {
         if (!existe) {
             progresso.missoes.push(JSON.parse(JSON.stringify(padrao)));
         } else {
-            // Atualiza título se mudou (para refletir a mudança de 21 para 30 dias)
             existe.titulo = padrao.titulo;
             existe.meta = padrao.meta;
+            existe.unidade = padrao.unidade;
         }
     });
     localStorage.setItem("lifeRPG", JSON.stringify(progresso));
@@ -63,7 +63,7 @@ function abrirTab(tabId) {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
     document.getElementById(tabId).classList.add('active');
-    
+
     const botoes = document.querySelectorAll('.tab-btn');
     if(tabId === 'tab-status') botoes[0].classList.add('active');
     if(tabId === 'tab-missoes') botoes[1].classList.add('active');
@@ -87,14 +87,14 @@ function verificarDiasPerdidos() {
     const dataUltimo = stringParaData(ultimoRegistroStr);
     const diffTempo = dataHoje - dataUltimo;
     const diffDias = Math.ceil(diffTempo / (1000 * 60 * 60 * 24)); 
-    
+
     let diasPenalizados = 0;
 
     for (let i = 1; i < diffDias; i++) {
         let diaPerdido = new Date(dataHoje);
         diaPerdido.setDate(dataHoje.getDate() - i); 
         let dataPerdidaStr = diaPerdido.toLocaleDateString("pt-BR");
-        
+
         if (!progresso.historico.find(d => d.data === dataPerdidaStr)) {
             let xpPerdido = -50; 
             let status = "ESQUECEU 💀";
@@ -103,25 +103,16 @@ function verificarDiasPerdidos() {
                 xp: xpPerdido,
                 status: status,
                 detalhes: {
-                    pressao_sis: "N/A", 
-                    pressao_dia: "N/A",
-                    glicemia: "N/A",
-                    acucar: "N/A",
-                    agua: "N/A",
-                    sono: "N/A",
-                    treino: "N/A",
-                    cardio: "N/A",
-                    estudo: "N/A",
-                    exercicios: "N/A",
-                    leitura: "N/A",
-                    idioma: "N/A"
+                    pressao_sis: "N/A", pressao_dia: "N/A", glicemia: "N/A", 
+                    acucar: "N/A", agua: "N/A", sono: "N/A", treino: "N/A", 
+                    cardio: "N/A", estudo: "N/A", exercicios: "N/A", leitura: "N/A", idioma: "N/A"
                 }
             });
             progresso.xpTotal += xpPerdido;
             diasPenalizados++;
         }
     }
-    
+
     progresso.historico.sort((a, b) => stringParaData(b.data) - stringParaData(a.data));
     if (diasPenalizados > 0) {
         salvar();
@@ -160,7 +151,7 @@ function carregarDadosHoje() {
 
 function atualizarInterface() {
     calcularNivel();
-    
+
     const xpBanner = document.getElementById("banner-xp");
     const nivelDisplay = document.getElementById("nivel-display");
     if(xpBanner) xpBanner.innerText = `XP: ${progresso.xpTotal}`;
@@ -171,11 +162,11 @@ function atualizarInterface() {
     if(listaHistorico) {
         let html = "";
         if(!progresso.historico) progresso.historico = [];
-        
+
         progresso.historico.forEach((dia, index) => {
             let cor = dia.xp >= 0 ? "#4ade80" : "#f87171";
             let det = dia.detalhes || {};
-            
+
             let textoAcucar = det.acucar === "nao" ? "🚫 Zero" : (det.acucar === "sim" ? "🍬 Comeu" : "-");
             let textoAgua = det.agua === "sim" ? "💧 2L+" : (det.agua === "nao" ? "❌ <2L" : "-");
             let textoPressao = (det.pressao_sis && det.pressao_dia) ? `${det.pressao_sis}/${det.pressao_dia}` : (det.pressao_sis || '-');
@@ -215,7 +206,7 @@ function renderizarMissoes() {
 
     let html = "";
     let categoriaAtual = "";
-    
+
     if(!progresso.missoes) progresso.missoes = [];
 
     progresso.missoes.forEach((missao, index) => {
@@ -223,18 +214,26 @@ function renderizarMissoes() {
             categoriaAtual = missao.cat;
             html += `<div class="categoria-titulo">${categoriaAtual}</div>`;
         }
-        
+
         let porcentagem = missao.atual;
-        if (porcentagem > 100) porcentagem = 100;
+        
+        // Tratamento visual para barras
+        let barraWidth = (missao.atual / missao.meta) * 100;
+        if (barraWidth > 100) barraWidth = 100;
+        
+        // Caso especial: Meta invertida (Glicada - quanto menor melhor)
+        // Se a meta for 5 e o atual for 9, não é 180% concluído.
+        // Vou deixar a barra estática cheia se estiver acima da meta para não confundir,
+        // mas o texto mostrará a realidade.
 
         html += `
         <div class="missao-card">
             <div class="missao-header">
                 <span>${missao.titulo}</span>
-                <span>${missao.atual}% / ${missao.meta} ${missao.unidade || ''}</span>
+                <span>${missao.atual} / ${missao.meta} ${missao.unidade || ''}</span>
             </div>
             <div class="barra-fundo">
-                <div class="barra-progresso" style="width: ${porcentagem}%"></div>
+                <div class="barra-progresso" style="width: ${barraWidth}%"></div>
             </div>
             <div class="botoes-progresso">
                 <button class="btn-small" onclick="alterarProgresso(${index}, -1)">-</button>
@@ -249,23 +248,28 @@ function renderizarMissoes() {
 // === LÓGICA DE BÔNUS DE MISSÃO (1000 XP) ===
 function alterarProgresso(index, valor) {
     let missao = progresso.missoes[index];
-    const estavaCompleta = missao.atual >= 100;
-    
-    // Incremento de 5% (pode ajustar se quiser passos menores)
-    missao.atual += (valor * 5); 
-    
-    if (missao.atual < 0) missao.atual = 0;
-    if (missao.atual > 100) missao.atual = 100;
+    const estavaCompleta = missao.atual >= missao.meta;
 
-    // Se completou agora (0 -> 100)
-    if (!estavaCompleta && missao.atual === 100) {
+    // Incremento inteligente para metas grandes
+    let incremento = 1;
+    if (missao.meta >= 1000) incremento = 100; 
+    if (missao.meta >= 100000) incremento = 5000;
+
+    missao.atual += (valor * incremento); 
+
+    if (missao.atual < 0) missao.atual = 0;
+    
+    const completouAgora = missao.atual >= missao.meta;
+
+    // Se completou agora (e não estava completa antes)
+    if (!estavaCompleta && completouAgora) {
         const bonus = 1000;
         progresso.xpTotal += bonus;
         alert(`🎉 PARABÉNS! Missão "${missao.titulo}" Concluída!\n\nVocê ganhou +${bonus} XP e subiu de nível! 🚀`);
     }
 
-    // Se desmarcou (100 -> 95)
-    if (estavaCompleta && missao.atual < 100) {
+    // Se desmarcou (caiu abaixo da meta)
+    if (estavaCompleta && !completouAgora) {
         const penalty = 1000;
         progresso.xpTotal -= penalty;
         if(progresso.xpTotal < 0) progresso.xpTotal = 0; 
@@ -278,17 +282,16 @@ function calcularXP() {
     const msgErro = document.getElementById("msg-erro");
     msgErro.innerHTML = "";
     const hoje = new Date().toLocaleDateString("pt-BR");
-    
+
     const indexHoje = progresso.historico.findIndex(dia => dia.data === hoje);
     let xpAnterior = 0;
     if (indexHoje !== -1) xpAnterior = progresso.historico[indexHoje].xp;
 
-    // CAPTURA
     const vPressaoSis = document.getElementById("pressao_sis").value;
     const vPressaoDia = document.getElementById("pressao_dia").value;
     const vGlicemia = document.getElementById("glicemia").value;
     const vAcucar = document.getElementById("acucar").value;
-    const vAgua = document.getElementById("agua").value; // NOVO
+    const vAgua = document.getElementById("agua").value; 
     const vSono = document.getElementById("sono").value;
     const vTreino = document.getElementById("treino").value;
     const vCardio = document.getElementById("cardio").value;
@@ -298,9 +301,7 @@ function calcularXP() {
     const vIdioma = document.getElementById("idioma").value;
 
     let xp = 0;
-    
-    // === CÁLCULO ===
-    
+
     // Pressão
     let sistolica = Number(vPressaoSis);
     if (sistolica > 50) sistolica = Math.floor(sistolica / 10);
@@ -316,15 +317,15 @@ function calcularXP() {
     if (vGlicemia !== "" && glicemia < 99) xp += 5; 
     else if (vGlicemia !== "" && glicemia <= 110) xp += 3; 
     else xp -= 5;
-    
+
     // Açúcar
     if (vAcucar === "nao") xp += 5; 
     else xp -= 5;
 
-    // Água (NOVO)
+    // Água
     if (vAgua === "sim") xp += 5;
     else xp -= 5;
-    
+
     // Sono
     const sono = Number(vSono);
     if (vSono !== "" && sono >= 7) xp += 5; 
@@ -333,29 +334,29 @@ function calcularXP() {
 
     // Treino
     xp += vTreino === "sim" ? 5 : -5;
-    
+
     // Cardio
     const cardio = Number(vCardio);
     if (vCardio !== "" && cardio >= 60) xp += 5; 
     else if (vCardio !== "" && cardio >= 30) xp += 3; 
     else xp -= 5;
-    
+
     // Mente
     const estudo = Number(vEstudo);
     if (vEstudo !== "" && estudo >= 60) xp += 5; 
     else if (vEstudo !== "" && estudo >= 30) xp += 3; 
     else xp -= 5; 
-    
+
     const exercicios = Number(vExercicios);
     if (vExercicios !== "" && exercicios >= 10) xp += 5; 
     else if (vExercicios !== "" && exercicios >= 5) xp += 3; 
     else xp -= 5; 
-    
+
     const leitura = Number(vLeitura);
     if (vLeitura !== "" && leitura >= 30) xp += 5; 
     else if (vLeitura !== "" && leitura >= 15) xp += 3; 
     else xp -= 5; 
-    
+
     const idioma = Number(vIdioma);
     if (vIdioma !== "" && idioma >= 60) xp += 5; 
     else if (vIdioma !== "" && idioma >= 30) xp += 3; 
@@ -363,13 +364,13 @@ function calcularXP() {
 
     // Status
     let status = "NORMAL";
-    if (xp >= 50) status = "LENDÁRIO 👑"; // Subi um pouco a régua
+    if (xp >= 50) status = "LENDÁRIO 👑";
     else if (xp >= 40) status = "ELITE 🔥"; 
     else if (xp >= 30) status = "BOM 🚀"; 
     else if (xp < 10) status = "CRÍTICO 💀";
 
     progresso.xpTotal = progresso.xpTotal - xpAnterior + xp;
-    
+
     const dadosDia = {
         data: hoje,
         xp: xp,
@@ -400,11 +401,10 @@ function calcularXP() {
     const divResultado = document.getElementById("resultado");
     divResultado.style.display = "block";
     divResultado.innerHTML = `<h2>ATUALIZADO</h2><span>${xp} XP</span><br>${status}`;
-    
+
     salvar();
 }
 
-// ... Restante das funções iguais ...
 function deletarItem(index) {
     if(confirm("Apagar registro?")) {
         progresso.xpTotal -= progresso.historico[index].xp;
@@ -441,7 +441,6 @@ function importarDados() {
     }
 }
 
-// Inicia
 verificarDiasPerdidos();
 carregarDadosHoje();
 atualizarInterface();
