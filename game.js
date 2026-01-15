@@ -1,35 +1,35 @@
-// ====== LISTA PADRONIZADA ======
+// ====== STANDARDIZED QUEST LIST (English) ======
 const listaMissoesPadrao = [
-  { id: 1, cat: "Carreira & Estudos", titulo: "Concluir Pós-Graduação", atual: 0, meta: 100, unidade: "%" },
-  { id: 2, cat: "Carreira & Estudos", titulo: "Estudar para Enem", atual: 0, meta: 100, unidade: "%" },
-  { id: 3, cat: "Carreira & Estudos", titulo: "Ingressar na Eng. Elétrica IFSP", atual: 0, meta: 100, unidade: "%" },
-  { id: 4, cat: "Carreira & Estudos", titulo: "Ser efetivado ISA Energia", atual: 0, meta: 100, unidade: "%" },
-  { id: 5, cat: "Carreira & Estudos", titulo: "Obter registro Eletrotécnico", atual: 0, meta: 100, unidade: "%" },
-  { id: 6, cat: "Carreira & Estudos", titulo: "Dominar Mat/Fís/Elé", atual: 0, meta: 100, unidade: "%" },
-  { id: 7, cat: "Carreira & Estudos", titulo: "Poliglota (Falar 4 Idiomas)", atual: 0, meta: 4, unidade: "idiomas" },
-  { id: 8, cat: "Carreira & Estudos", titulo: "Inglês C2 (Fluência)", atual: 0, meta: 100, unidade: "%" },
-  { id: 9, cat: "Saúde & Físico", titulo: "Pressão/Glicemia Estabilizadas", atual: 0, meta: 100, unidade: "%" },
-  { id: 10, cat: "Saúde & Físico", titulo: "Alcançar Peso Ideal (80kg)", atual: 100, meta: 80, unidade: "kg", start: 100 },
-  { id: 11, cat: "Saúde & Físico", titulo: "Aprender a Nadar", atual: 0, meta: 100, unidade: "%" },
-  { id: 12, cat: "Habilidades & Lazer", titulo: "Aprender Cavaquinho", atual: 0, meta: 100, unidade: "%" },
-  { id: 13, cat: "Habilidades & Lazer", titulo: "Meta Leitura Anual", atual: 0, meta: 12, unidade: "Livros" },
-  { id: 14, cat: "Habilidades & Lazer", titulo: "Viajar para Outro País", atual: 0, meta: 100, unidade: "%" },
-  { id: 15, cat: "Financeiro & Bens", titulo: "Limpar o Nome", atual: 0, meta: 100, unidade: "%" },
-  { id: 16, cat: "Financeiro & Bens", titulo: "Salário de 10k/mês", atual: 0, meta: 10000, unidade: "R$" },
-  { id: 17, cat: "Financeiro & Bens", titulo: "Patrimônio 1 Milhão", atual: 0, meta: 1000000, unidade: "R$" },
-  { id: 18, cat: "Financeiro & Bens", titulo: "Comprar Casa Própria", atual: 0, meta: 100, unidade: "%" },
-  { id: 19, cat: "Financeiro & Bens", titulo: "Comprar Moto", atual: 0, meta: 10000, unidade: "R$" },
-  { id: 20, cat: "Financeiro & Bens", titulo: "Comprar Carro Automático", atual: 0, meta: 50000, unidade: "R$" },
-  { id: 21, cat: "Financeiro & Bens", titulo: "Me casar", atual: 0, meta: 100, unidade: "%" },
-  // MISSÕES ADICIONAIS
-  { id: 22, cat: "Saúde & Físico", titulo: "30 Dias Zero Açúcar", atual: 0, meta: 30, unidade: "dias" },
-  { id: 24, cat: "Saúde & Físico", titulo: "Musculação 5x/semana (3 meses)", atual: 0, meta: 60, unidade: "treinos" },
-  { id: 26, cat: "Saúde & Físico", titulo: "Baixar Glicada para 5%", atual: 9, meta: 5, unidade: "%", start: 9 },
+  { id: 1, cat: "Career & Studies", titulo: "Finish Postgraduate Degree", atual: 0, meta: 100, unidade: "%" },
+  { id: 2, cat: "Career & Studies", titulo: "Study for ENEM", atual: 0, meta: 100, unidade: "%" },
+  { id: 3, cat: "Career & Studies", titulo: "Enter Elec. Engineering (IFSP)", atual: 0, meta: 100, unidade: "%" },
+  { id: 4, cat: "Career & Studies", titulo: "Get Hired at ISA Energia", atual: 0, meta: 100, unidade: "%" },
+  { id: 5, cat: "Career & Studies", titulo: "Get Electrotechnical License", atual: 0, meta: 100, unidade: "%" },
+  { id: 6, cat: "Career & Studies", titulo: "Master Math/Phys/Elec", atual: 0, meta: 100, unidade: "%" },
+  { id: 7, cat: "Career & Studies", titulo: "Polyglot (Speak 4 Languages)", atual: 0, meta: 4, unidade: "langs" },
+  { id: 8, cat: "Career & Studies", titulo: "English C2 (Fluency)", atual: 0, meta: 100, unidade: "%" },
+  { id: 9, cat: "Health & Body", titulo: "Stabilize BP/Glucose", atual: 0, meta: 100, unidade: "%" },
+  { id: 10, cat: "Health & Body", titulo: "Reach Ideal Weight (80kg)", atual: 100, meta: 80, unidade: "kg", start: 100 },
+  { id: 11, cat: "Health & Body", titulo: "Learn to Swim", atual: 0, meta: 100, unidade: "%" },
+  { id: 12, cat: "Skills & Leisure", titulo: "Learn Cavaquinho", atual: 0, meta: 100, unidade: "%" },
+  { id: 13, cat: "Skills & Leisure", titulo: "Annual Reading Goal", atual: 0, meta: 12, unidade: "books" },
+  { id: 14, cat: "Skills & Leisure", titulo: "Travel Abroad", atual: 0, meta: 100, unidade: "%" },
+  { id: 15, cat: "Finance & Assets", titulo: "Clear Debt/Name", atual: 0, meta: 100, unidade: "%" },
+  { id: 16, cat: "Finance & Assets", titulo: "Salary 10k/month", atual: 0, meta: 10000, unidade: "BRL" },
+  { id: 17, cat: "Finance & Assets", titulo: "1 Million Net Worth", atual: 0, meta: 1000000, unidade: "BRL" },
+  { id: 18, cat: "Finance & Assets", titulo: "Buy Own House", atual: 0, meta: 100, unidade: "%" },
+  { id: 19, cat: "Finance & Assets", titulo: "Buy Motorcycle", atual: 0, meta: 10000, unidade: "BRL" },
+  { id: 20, cat: "Finance & Assets", titulo: "Buy Automatic Car", atual: 0, meta: 50000, unidade: "BRL" },
+  { id: 21, cat: "Finance & Assets", titulo: "Get Married", atual: 0, meta: 100, unidade: "%" },
+  // NEW MISSIONS
+  { id: 22, cat: "Health & Body", titulo: "30 Days Zero Sugar", atual: 0, meta: 30, unidade: "days" },
+  { id: 24, cat: "Health & Body", titulo: "Gym 5x/week (3 months)", atual: 0, meta: 60, unidade: "workouts" },
+  { id: 26, cat: "Health & Body", titulo: "Lower HbA1c to 5%", atual: 9, meta: 5, unidade: "%", start: 9 },
 ];
 
 const inputIds = ["pressao_sis", "pressao_dia", "glicemia", "acucar", "agua", "sono", "treino", "cardio", "estudo", "exercicios", "leitura", "idioma"];
 
-// ====== FUNÇÃO DE DATA SEGURA (Evita bugs de fuso/locale) ======
+// ====== DATE FUNCTION ======
 function getDataHoje() {
     const d = new Date();
     const dia = String(d.getDate()).padStart(2, '0');
@@ -38,7 +38,7 @@ function getDataHoje() {
     return `${dia}/${mes}/${ano}`;
 }
 
-// ====== INICIALIZAÇÃO ======
+// ====== INITIALIZATION ======
 let progresso = JSON.parse(localStorage.getItem("lifeRPG")) || {
   xpTotal: 0,
   nivel: 1,
@@ -46,14 +46,16 @@ let progresso = JSON.parse(localStorage.getItem("lifeRPG")) || {
   missoes: JSON.parse(JSON.stringify(listaMissoesPadrao))
 };
 
-// === SINCRONIZAÇÃO INTELIGENTE ===
+// === SMART SYNC (Translate Titles) ===
 if (progresso.missoes) {
     listaMissoesPadrao.forEach(padrao => {
         const existe = progresso.missoes.find(m => m.id === padrao.id);
         if (!existe) {
             progresso.missoes.push(JSON.parse(JSON.stringify(padrao)));
         } else {
+            // TRANSLATE TITLES: Overwrite stored title with the new English one
             existe.titulo = padrao.titulo;
+            existe.cat = padrao.cat; // Translate Category
             existe.meta = padrao.meta;
             existe.unidade = padrao.unidade;
             if (padrao.start !== undefined) existe.start = padrao.start;
@@ -80,11 +82,10 @@ function abrirTab(tabId) {
     if(tabId === 'tab-diario') botoes[2].classList.add('active');
 }
 
-// ====== LÓGICA DE DATAS E PENALIDADES ======
+// ====== DATE LOGIC ======
 function stringParaData(dataStr) {
     if(!dataStr) return new Date();
     const partes = dataStr.split('/');
-    // partes[2] = Ano, partes[1] = Mês, partes[0] = Dia
     return new Date(partes[2], partes[1] - 1, partes[0]);
 }
 
@@ -99,18 +100,15 @@ function verificarDiasPerdidos() {
     const dataHoje = stringParaData(hojeStr);
     const dataUltimo = stringParaData(ultimoRegistroStr);
     
-    // Calcula diferença em dias (ignora horas)
     const diffTempo = dataHoje.getTime() - dataUltimo.getTime();
     const diffDias = Math.ceil(diffTempo / (1000 * 60 * 60 * 24)); 
 
     let diasPenalizados = 0;
 
-    // Se a diferença for > 1, significa que pulou pelo menos 1 dia
     for (let i = 1; i < diffDias; i++) {
         let diaPerdido = new Date(dataHoje);
         diaPerdido.setDate(dataHoje.getDate() - i); 
         
-        // Formatação manual segura
         const d = String(diaPerdido.getDate()).padStart(2, '0');
         const m = String(diaPerdido.getMonth() + 1).padStart(2, '0');
         const a = diaPerdido.getFullYear();
@@ -118,7 +116,7 @@ function verificarDiasPerdidos() {
 
         if (!progresso.historico.find(d => d.data === dataPerdidaStr)) {
             let xpPerdido = -50; 
-            let status = "ESQUECEU 💀";
+            let status = "FORGOT 💀"; // Translated
             progresso.historico.unshift({
                 data: dataPerdidaStr,
                 xp: xpPerdido,
@@ -137,7 +135,7 @@ function verificarDiasPerdidos() {
     progresso.historico.sort((a, b) => stringParaData(b.data) - stringParaData(a.data));
     if (diasPenalizados > 0) {
         salvar();
-        alert(`⚠️ ATENÇÃO!\n\nVocê esqueceu de preencher o diário por ${diasPenalizados} dia(s).\nForam descontados ${diasPenalizados * 50} XP automaticamente.`);
+        alert(`⚠️ WARNING!\n\nYou forgot the diary for ${diasPenalizados} day(s).\nPenalty: ${diasPenalizados * 50} XP deducted.`);
     }
 }
 
@@ -176,7 +174,7 @@ function atualizarInterface() {
     const xpBanner = document.getElementById("banner-xp");
     const nivelDisplay = document.getElementById("nivel-display");
     if(xpBanner) xpBanner.innerText = `XP: ${progresso.xpTotal}`;
-    if(nivelDisplay) nivelDisplay.innerText = `NÍVEL ${progresso.nivel}`;
+    if(nivelDisplay) nivelDisplay.innerText = `LEVEL ${progresso.nivel}`; // Translated
 
     const listaHistorico = document.getElementById("lista-historico");
     if(listaHistorico) {
@@ -187,7 +185,7 @@ function atualizarInterface() {
             let cor = dia.xp >= 0 ? "#4ade80" : "#f87171";
             let det = dia.detalhes || {};
 
-            let textoAcucar = det.acucar === "nao" ? "🚫 Zero" : (det.acucar === "sim" ? "🍬 Comeu" : "-");
+            let textoAcucar = det.acucar === "nao" ? "🚫 Zero" : (det.acucar === "sim" ? "🍬 Ate" : "-");
             let textoAgua = det.agua === "sim" ? "💧 2L+" : (det.agua === "nao" ? "❌ <2L" : "-");
             let textoPressao = (det.pressao_sis && det.pressao_dia) ? `${det.pressao_sis}/${det.pressao_dia}` : (det.pressao_sis || '-');
 
@@ -200,17 +198,17 @@ function atualizarInterface() {
                 </div>
                 
                 <div class="historico-detalhes">
-                    <span>🩺 Pressão: <b style="color:#fff">${textoPressao}</b></span>
-                    <span>🩸 Glicemia: <b style="color:#fff">${det.glicemia || '-'}</b></span>
-                    <span>🚫 Açúcar: <b style="color:#fff">${textoAcucar}</b></span>
-                    <span>💧 Água: <b style="color:#fff">${textoAgua}</b></span>
-                    <span>😴 Sono: <b style="color:#fff">${det.sono || '-'}h</b></span>
-                    <span>🏋️ Treino: <b style="color:#fff">${det.treino || '-'}</b></span>
+                    <span>🩺 BP: <b style="color:#fff">${textoPressao}</b></span>
+                    <span>🩸 Glucose: <b style="color:#fff">${det.glicemia || '-'}</b></span>
+                    <span>🚫 Sugar: <b style="color:#fff">${textoAcucar}</b></span>
+                    <span>💧 Water: <b style="color:#fff">${textoAgua}</b></span>
+                    <span>😴 Sleep: <b style="color:#fff">${det.sono || '-'}h</b></span>
+                    <span>🏋️ Gym: <b style="color:#fff">${det.treino || '-'}</b></span>
                     <span>🏃 Cardio: <b style="color:#fff">${det.cardio || '-'}min</b></span>
-                    <span>🧠 Estudo: <b style="color:#fff">${det.estudo || '-'}min</b></span>
-                    <span>📐 Exer.: <b style="color:#fff">${det.exercicios || '-'}</b></span>
-                    <span>📚 Ler: <b style="color:#fff">${det.leitura || '-'}min</b></span>
-                    <span>🗣️ Idioma: <b style="color:#fff">${det.idioma || '-'}min</b></span>
+                    <span>🧠 Study: <b style="color:#fff">${det.estudo || '-'}min</b></span>
+                    <span>📐 Math: <b style="color:#fff">${det.exercicios || '-'}</b></span>
+                    <span>📚 Read: <b style="color:#fff">${det.leitura || '-'}min</b></span>
+                    <span>🗣️ Lang: <b style="color:#fff">${det.idioma || '-'}min</b></span>
                 </div>
             </div>`;
         });
@@ -274,7 +272,7 @@ function renderizarMissoes() {
     container.innerHTML = html;
 }
 
-// === ALTERAR PROGRESSO ===
+// === CHANGE PROGRESS (Smart Steps) ===
 function alterarProgresso(index, direction) {
     let missao = progresso.missoes[index];
     
@@ -287,7 +285,6 @@ function alterarProgresso(index, direction) {
 
     let passo = missao.step !== undefined ? missao.step : 5;
     
-    // Incrementar metas grandes mais rápido
     if (missao.meta >= 1000 && missao.step === undefined) passo = 100; 
     if (missao.meta >= 100000 && missao.step === undefined) passo = 5000;
 
@@ -308,7 +305,8 @@ function alterarProgresso(index, direction) {
     if (!estavaCompleta && completouAgora) {
         const bonus = 1000;
         progresso.xpTotal += bonus;
-        alert(`🎉 PARABÉNS! Missão "${missao.titulo}" Concluída!\n\nVocê ganhou +${bonus} XP e subiu de nível! 🚀`);
+        // Translated Alert
+        alert(`🎉 CONGRATS! Quest "${missao.titulo}" Completed!\n\nYou gained +${bonus} XP and Leveled Up! 🚀`);
     }
 
     if (estavaCompleta && !completouAgora) {
@@ -320,10 +318,11 @@ function alterarProgresso(index, direction) {
     salvar();
 }
 
+// === CALCULATE XP ===
 function calcularXP() {
     const msgErro = document.getElementById("msg-erro");
     msgErro.innerHTML = "";
-    const hoje = getDataHoje(); // Data Segura
+    const hoje = getDataHoje();
 
     const indexHoje = progresso.historico.findIndex(dia => dia.data === hoje);
     let xpAnterior = 0;
@@ -344,7 +343,7 @@ function calcularXP() {
 
     let xp = 0;
 
-    // Pressão
+    // BP
     let sistolica = Number(vPressaoSis);
     if (sistolica > 50) sistolica = Math.floor(sistolica / 10);
 
@@ -354,27 +353,27 @@ function calcularXP() {
     else if (vPressaoSis !== "" && sistolica >= 14) xp -= 5;
     else xp -= 5; 
 
-    // Glicemia
+    // Glucose
     const glicemia = Number(vGlicemia);
     if (vGlicemia !== "" && glicemia < 99) xp += 5; 
     else if (vGlicemia !== "" && glicemia <= 110) xp += 3; 
     else xp -= 5;
 
-    // Açúcar
+    // Sugar
     if (vAcucar === "nao") xp += 5; 
     else xp -= 5;
 
-    // Água
+    // Water
     if (vAgua === "sim") xp += 5;
     else xp -= 5;
 
-    // Sono
+    // Sleep
     const sono = Number(vSono);
     if (vSono !== "" && sono >= 7) xp += 5; 
     else if (vSono !== "" && sono >= 5) xp += 3; 
     else xp -= 5;
 
-    // Treino
+    // Workout
     xp += vTreino === "sim" ? 5 : -5;
 
     // Cardio
@@ -383,7 +382,7 @@ function calcularXP() {
     else if (vCardio !== "" && cardio >= 30) xp += 3; 
     else xp -= 5;
 
-    // Mente
+    // Mind
     const estudo = Number(vEstudo);
     if (vEstudo !== "" && estudo >= 60) xp += 5; 
     else if (vEstudo !== "" && estudo >= 30) xp += 3; 
@@ -406,10 +405,10 @@ function calcularXP() {
 
     // Status
     let status = "NORMAL";
-    if (xp >= 50) status = "LENDÁRIO 👑";
+    if (xp >= 50) status = "LEGENDARY 👑";
     else if (xp >= 40) status = "ELITE 🔥"; 
-    else if (xp >= 30) status = "BOM 🚀"; 
-    else if (xp < 10) status = "CRÍTICO 💀";
+    else if (xp >= 30) status = "GOOD 🚀"; 
+    else if (xp < 10) status = "CRITICAL 💀";
 
     progresso.xpTotal = progresso.xpTotal - xpAnterior + xp;
 
@@ -442,30 +441,31 @@ function calcularXP() {
 
     const divResultado = document.getElementById("resultado");
     divResultado.style.display = "block";
-    divResultado.innerHTML = `<h2>ATUALIZADO</h2><span>${xp} XP</span><br>${status}`;
+    divResultado.innerHTML = `<h2>UPDATED</h2><span>${xp} XP</span><br>${status}`;
 
     salvar();
 }
 
-// === FERRAMENTA: AJUSTE MANUAL DE XP ===
+// === TOOL: ADJUST XP ===
 function ajustarXPManual() {
     const valorAtual = progresso.xpTotal;
-    const novoValor = prompt(`Seu XP atual é: ${valorAtual}\n\nDigite o novo valor correto (ex: 500):`);
+    // Translated Prompt
+    const novoValor = prompt(`Current XP: ${valorAtual}\n\nEnter corrected XP (e.g., 500):`);
     
     if (novoValor !== null && novoValor.trim() !== "") {
         const xpNumerico = parseInt(novoValor);
         if (!isNaN(xpNumerico)) {
             progresso.xpTotal = xpNumerico;
             salvar();
-            alert(`✅ XP Ajustado para ${xpNumerico}!`);
+            alert(`✅ XP Set to ${xpNumerico}!`);
         } else {
-            alert("❌ Valor inválido. Digite apenas números.");
+            alert("❌ Invalid number.");
         }
     }
 }
 
 function deletarItem(index) {
-    if(confirm("Apagar registro?")) {
+    if(confirm("Delete record?")) {
         progresso.xpTotal -= progresso.historico[index].xp;
         progresso.historico.splice(index, 1);
         salvar();
@@ -473,7 +473,7 @@ function deletarItem(index) {
 }
 
 function resetarDados() {
-    if(confirm("⚠️ APAGAR TUDO?")) {
+    if(confirm("⚠️ WIPE ALL DATA?")) {
         localStorage.removeItem("lifeRPG");
         location.reload();
     }
@@ -482,25 +482,25 @@ function resetarDados() {
 function exportarDados() {
     const dados = JSON.stringify(progresso);
     navigator.clipboard.writeText(dados).then(() => {
-        alert("✅ DADOS COPIADOS!");
-    }).catch(err => prompt("Copie:", dados));
+        alert("✅ DATA COPIED!");
+    }).catch(err => prompt("Copy this:", dados));
 }
 
 function importarDados() {
-    const dados = prompt("Cole aqui:");
+    const dados = prompt("Paste here:");
     if (dados) {
         try {
             const json = JSON.parse(dados);
             if (json.xpTotal !== undefined) {
                 progresso = json;
                 salvar();
-                alert("✅ Carregado!");
+                alert("✅ Loaded!");
             }
-        } catch (e) { alert("❌ Erro."); }
+        } catch (e) { alert("❌ Error."); }
     }
 }
 
-// Inicia
+// Start
 verificarDiasPerdidos();
 carregarDadosHoje();
 atualizarInterface();
